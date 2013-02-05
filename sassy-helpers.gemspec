@@ -17,4 +17,6 @@ Gem::Specification.new do |gem|
   gem.name          = "sassy-helpers"
   gem.require_paths = ["lib"]
   gem.version       = SassyHelpers::VERSION
+
+  gem.add_development_dependency "rspec", "~> 2.6"
 end

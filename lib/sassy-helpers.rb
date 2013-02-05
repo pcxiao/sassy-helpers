@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 require "version"
 require 'modelling/model'
 require 'modelling/parameter'
