@@ -16,7 +16,10 @@ module Modelling
 
 		# write SBML
 		def to_sbml
-
+			case @type
+			when "scalar"
+				
+			end
 		end
 
 		def to_s

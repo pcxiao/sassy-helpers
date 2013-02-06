@@ -21,11 +21,10 @@ module Modelling
 		#
 		# Reads the formula from matlab, and does some normalising
 		def from_matlab(matlab_eq)
-			@formula = matlab_eq
-				.gsub(/\.\.\..*([\n\r]+|$)/, "")
-				.gsub(/\%.*([\n\r]+|$)/, "")
-				.gsub(/\s*([\/*])\s*/, '\1')
-				.gsub(/\s+/, " ")
+			@formula = matlab_eq.gsub(/\.\.\..*([\n\r]+|$)/, "")	\
+				.gsub(/\%.*([\n\r]+|$)/, "")	\
+				.gsub(/\s*([\/*])\s*/, '\1')	\
+				.gsub(/\s+/, " ")				\
 				.strip
 			raise "Empty formula" if @formula == ""
 			@formula
