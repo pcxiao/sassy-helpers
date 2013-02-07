@@ -3,13 +3,17 @@ require "rexml/document"
 module Modelling
 	# Parameter class
 	class Parameter
+		attr_accessor :name
+		attr_accessor :value
+		attr_accessor :description
+
 		# instance counter
 		@@insts = 1
 
 		def initialize(name = nil, value = nil, desc = nil)
 			@name = name || "parameter_#{@@insts}"
 			@value = (value || "0.0").to_f
-			@desc = desc || ""
+			@description = desc || ""
 			@@insts = @@insts + 1
 		end
 
@@ -30,7 +34,7 @@ module Modelling
 			end
 			@name = pa[0]
 			@value = pa[1].to_f
-			@desc = str.sub(/\s*[^\s]+\s+[^\s]+\s*/, "").sub(/^[\\"']+\s*/, "").sub(/\s*[\\"']+$/, "") || ""
+			@description = str.sub(/\s*[^\s]+\s+[^\s]+\s*/, "").sub(/^[\\"']+\s*/, "").sub(/\s*[\\"']+$/, "") || ""
 		end
 
 		# Return the parameter as an XML node
@@ -43,12 +47,12 @@ module Modelling
 
 		# Make a parameter line
 		def to_par
-			"#{@name}    #{@value}   \"#{@desc}\"\n"
+			"#{@name}    #{@value}   \"#{@description}\"\n"
 		end
 
 		# Make a string
 		def to_s
-			"Parameter '#{@name}' = #{@value} " + (@desc.length > 0 ? "(#{@desc})" : "")
+			"Parameter '#{@name}' = #{@value} " + (@description.length > 0 ? "(#{@description})" : "")
 		end
 
 	end

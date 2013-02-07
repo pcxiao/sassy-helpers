@@ -6,9 +6,15 @@ module Modelling
 		
 		def initialize
 			@reactions = []
+			@rules = []
 			@parameters = []
 			@species = []
 			@name = "Model"
+		end
+
+		# read from sassy/matlab format
+		def from_matlab(code, parameters, spec_init = nil)
+			
 		end
 	end
 end

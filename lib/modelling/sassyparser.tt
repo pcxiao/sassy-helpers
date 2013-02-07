@@ -1,0 +1,77 @@
+# -*- encoding: utf-8 -*-
+module Modelling
+	# Sassy matlab file grammar
+	grammar Sassy
+		rule eof
+		  !.
+		end
+
+		rule eoc
+		  "\n" / eof
+		end
+
+		rule comment
+			("%" / "...") c:((!eoc .)*) eoc {
+				def value 
+					c.text_value.strip
+				end
+			}
+		end
+
+		rule function
+			"function" [\s]+ r:identlist [\s]* "=" [\s]* n:ident [\s]* p:identtuple {
+				def value
+					{
+						:name => n.text_value,
+						:parameters => p.value,
+						:returns => r.value
+					}
+				end
+			}
+		end
+
+		rule ident
+			[a-zA-Z] [a-zA-Z\_0-9]* 
+		end
+
+		rule comma 
+			[\s]* "," [\s]*
+		end
+
+		rule identlist
+			("[" [\s]* "]") 1..1 {
+				def value
+					[]
+				end			
+			} / (ident) 1..1 {
+				def value
+					[text_value]
+				end
+			} / "[" [\s]* ident [\s]* "]"  {
+				def value
+					[ elements[2].text_value ]
+				end
+			} / "[" [\s]* ((ident ( comma ident )*)?) [\s]* "]" {
+				def value
+					elements[2].text_value.split(/\s*,\s*/)
+				end			
+			}
+		end
+
+		rule identtuple 
+			"(" [\s]* ")" {
+				def value
+					[]
+				end				
+			} / "(" [\s]* a:ident [\s]* ")" {
+				def value
+					[a.text_value]
+				end
+			} / "(" [\s]* a:((ident ( comma ident )*)?) [\s]* ")" {
+				def value
+					a.text_value.split(/\s*,\s*/)
+				end			
+			}
+		end
+	end
+end
