@@ -3,5 +3,5 @@ require "bundler/gem_tasks"
 
 desc "run treetop"
 task :treetop do
-	`tt lib/modelling/sassyparser.tt`
+	`tt lib/modelling/sassyparser.treetop`
 end

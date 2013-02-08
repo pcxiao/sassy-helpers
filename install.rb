@@ -1,3 +1,3 @@
 # -*- encoding: utf-8 -*-
 
-`tt lib/modelling/sassyparser.tt`
+`tt lib/modelling/sassyparser.treetop`

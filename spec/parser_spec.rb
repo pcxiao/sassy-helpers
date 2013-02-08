@@ -44,18 +44,19 @@ describe Modelling::SassyParser do
 	end
 
 	it 'parses function defs' do 
-		parser = Modelling::SassyParser.new
-
-		parser.parse("function x = f(a, b)", :root => :function).value.should eql({
+		test_parse("function x = f(a, b)", :function).value.should eql({
 			:name => 'f',
 			:returns => [ 'x' ],
 			:parameters => [ 'a', 'b' ],
 			})
 
-		parser.parse("function [x1, x2] = ffasf_1()", :root => :function).value.should eql({
+		test_parse("function [x1, x2] = ffasf_1()", :function).value.should eql({
 			:name => 'ffasf_1',
 			:returns => [ 'x1', 'x2' ],
 			:parameters => [ ],
 			})
+	end
+	it 'parses sassy files' do 
+		test_parse(File.read("spec/herzel_model.m"), :root).value.should_not eql(nil)
 	end
 end

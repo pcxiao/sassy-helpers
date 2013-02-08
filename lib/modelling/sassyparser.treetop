@@ -1,7 +1,29 @@
-# -*- encoding: utf-8 -*-
+# -*- encoding: utf-8 -*- 
+require "modelling/sassyparser_extensions"
 module Modelling
 	# Sassy matlab file grammar
 	grammar Sassy
+
+		rule root 
+			skip f:function skip
+			e:evalp skip
+			d:dydt skip <ParsedModelFile> {
+				def value
+					validate(f.value, e.value, d.value)
+					{
+						:fname => f[:name],
+						:equations => d.value
+					}
+				end
+			}
+		end
+
+		# declare stuff that will be skipped
+		# (comments and empty lines)
+		rule skip
+			(comment / ws)*
+		end
+
 		rule eof
 		  !.
 		end
@@ -11,9 +33,53 @@ module Modelling
 		end
 
 		rule comment
-			("%" / "...") c:((!eoc .)*) eoc {
+			"%" c:((!eoc .)*) eoc {
 				def value 
 					c.text_value.strip
+				end
+			} / lcskip
+
+		end
+
+		# stuff that can be skipped within the same command
+		rule lcskip
+			"..." c:((!eoc .)*) eoc {
+				def value 
+					c.text_value.strip
+				end
+			}
+		end
+
+		rule ws 
+			[\s]+ {
+				def value
+					""
+				end
+			}
+		end
+
+		rule lcws 
+			(lcskip / comment / ws)* {
+				def value
+					(elements.map {|el| el.value}).join (" ")
+				end 
+			}
+		end
+
+		# evaluate the parameter assignments statement
+		rule evalp 
+			"eval" lcws? idt:identtuple ";"? {
+				def value
+					idt.value
+				end
+			}
+		end
+
+		# dydt block
+		rule dydt
+			ident lcws? "=" lcws? "[" [^\]]* "]" lcws? ";"? {
+				def value
+					[]
 				end
 			}
 		end
