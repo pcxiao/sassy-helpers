@@ -77,10 +77,20 @@ module Modelling
 
 		# dydt block
 		rule dydt
-			ident lcws? "=" lcws? "[" [^\]]* "]" lcws? ";"? {
+			dd:ident lcws? "=" lcws? "[" eqns:([^\]]*) "]" lcws? ";"? {
 				def value
-					[]
+					{
+						:dd => dd.text_value,
+						:equations => eqns.text_value.split(";")
+					}
 				end
+			}
+		end
+
+		# parse an equation
+		rule equation
+			(equation_part)+ {
+				
 			}
 		end
 
