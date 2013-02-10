@@ -11,8 +11,8 @@ module Modelling
 				def value
 					validate(f.value, e.value, d.value)
 					{
-						:fname => f[:name],
-						:equations => d.value
+						:fname => f.value[:name],
+						:equations => d.value[:equations],
 					}
 				end
 			}
@@ -59,7 +59,7 @@ module Modelling
 		end
 
 		rule lcws 
-			(lcskip / comment / ws)* {
+			(lcskip / comment / ws)+ {
 				def value
 					(elements.map {|el| el.value}).join (" ")
 				end 
@@ -77,21 +77,63 @@ module Modelling
 
 		# dydt block
 		rule dydt
-			dd:ident lcws? "=" lcws? "[" eqns:([^\]]*) "]" lcws? ";"? {
+			dd:ident lcws? "=" lcws? "[" eqns:equations "]" lcws? ";"? {
 				def value
 					{
 						:dd => dd.text_value,
-						:equations => eqns.text_value.split(";")
+						:equations => eqns.value
 					}
+				end
+			}
+		end
+
+		rule equations
+			equation more:(';' equation)* {
+				def value
+					[ equation.value ].concat(more.elements.map do |sem_eq| 
+						sem_eq.equation.value
+					end).reject {|x| x[:equation].strip == ""}
 				end
 			}
 		end
 
 		# parse an equation
 		rule equation
-			(equation_part)+ {
-				
+			equation_part+ {
+				def value
+					elements.inject({ :equation => "", :comments => "" }) {|memo, val| { 
+						:equation => memo[:equation] + val.value[:equation], 
+						:comments =>  memo[:comments] + val.value[:comments] } }
+				end
 			}
+		end
+
+		rule equation_part
+			(comment / lcskip)+ {
+				def value
+				{
+					:equation => "",
+					:comments => ((elements.map {|el| el.value}).join (" "))
+				}
+				end
+				} /
+			ws {
+				def value
+				{
+					:equation => "",
+					:comments => ""
+				}
+				end
+
+				} /
+			[^;\]]+ {
+				def value
+				{
+					:equation => text_value,
+					:comments => ""
+				}
+				end
+			} 
 		end
 
 		rule function

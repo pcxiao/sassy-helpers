@@ -57,6 +57,9 @@ describe Modelling::SassyParser do
 			})
 	end
 	it 'parses sassy files' do 
-		test_parse(File.read("spec/herzel_model.m"), :root).value.should_not eql(nil)
+		vv = test_parse(File.read("spec/herzel_model.m"), :root).value
+		vv.should_not eql(nil)
+		vv[:fname].should eql("f")
+		vv[:equations].length.should eql(19)
 	end
 end

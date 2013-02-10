@@ -17,15 +17,5 @@ module Modelling
 				end
 			end
 		end
-
-		class Equation < Treetop::Runtime::SyntaxNode
-			attr_accessor :equation
-			attr_accessor :comments
-
-			def initialize
-				@equation = ""
-				@comments = ""
-				super
-			end
 	end
 end
