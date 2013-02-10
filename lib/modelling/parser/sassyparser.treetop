@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*- 
-require "modelling/sassyparser_extensions"
+require "modelling/parser/sassyparser_extensions"
 module Modelling
 	# Sassy matlab file grammar
 	grammar Sassy

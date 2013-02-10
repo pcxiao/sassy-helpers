@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 require "treetop"
 require "sassy-helpers"
-require "modelling/sassyparser"
+require "modelling/parser/sassyparser"
 
 describe Modelling::SassyParser do
 	def test_parse(str, sym)
@@ -56,8 +56,8 @@ describe Modelling::SassyParser do
 			:parameters => [ ],
 			})
 	end
-	it 'parses sassy files' do 
-		vv = test_parse(File.read("spec/herzel_model.m"), :root).value
+	it 'parses sassy model files' do 
+		vv = test_parse(File.read("spec/testmodels/sassy/herzel_model.m"), :root).value
 		vv.should_not eql(nil)
 		vv[:fname].should eql("f")
 		vv[:equations].length.should eql(19)

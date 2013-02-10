@@ -6,4 +6,5 @@ require 'modelling/equation'
 require 'modelling/reaction'
 require 'modelling/species'
 require 'modelling/rule'
+require 'modelling/sbml'
 

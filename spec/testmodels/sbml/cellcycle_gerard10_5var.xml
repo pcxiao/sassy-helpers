@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="1">
+   <model id="Model_generated_by_BIOCHAM">
+      <listOfCompartments>
+         <compartment id="compartmentOne" size="1"/>
+      </listOfCompartments>
+      <listOfSpecies>
+         <species
+           id="E2F"
+           name="E2F"
+           compartment="compartmentOne"
+           initialConcentration="0.01" />
+         <species
+           id="Me"
+           name="Me"
+           compartment="compartmentOne"
+           initialConcentration="0.01" />
+         <species
+           id="Ma"
+           name="Ma"
+           compartment="compartmentOne"
+           initialConcentration="0.01" />
+         <species
+           id="Mb"
+           name="Mb"
+           compartment="compartmentOne"
+           initialConcentration="0.01" />
+         <species
+           id="Cdc20"
+           name="Cdc20"
+           compartment="compartmentOne"
+           initialConcentration="0.01" />
+      </listOfSpecies>
+      <listOfParameters>
+         <parameter id="Cdc20tot" name="Cdc20tot" value="5" />
+         <parameter id="E2Ftot" name="E2Ftot" value="3" />
+         <parameter id="GF" name="GF" value="1" />
+         <parameter id="Kda" name="Kda" value="0.10000000000000001" />
+         <parameter id="Kdb" name="Kdb" value="0.0050000000000000001" />
+         <parameter id="Kdd" name="Kdd" value="0.10000000000000001" />
+         <parameter id="Kde" name="Kde" value="0.10000000000000001" />
+         <parameter id="K1cdc20" name="K1cdc20" value="1" />
+         <parameter id="K2cdc20" name="K2cdc20" value="1" />
+         <parameter id="K1e2f" name="K1e2f" value="0.01" />
+         <parameter id="K2e2f" name="K2e2f" value="0.01" />
+         <parameter id="Vda" name="Vda" value="0.245" />
+         <parameter id="Vdb" name="Vdb" value="0.28000000000000003" />
+         <parameter id="Vdd" name="Vdd" value="0.245" />
+         <parameter id="Vde" name="Vde" value="0.34999999999999998" />
+         <parameter id="vsa" name="vsa" value="0.17499999999999999" />
+         <parameter id="vsb" name="vsb" value="0.20999999999999999" />
+         <parameter id="vsd" name="vsd" value="0.17499999999999999" />
+         <parameter id="vse" name="vse" value="0.20999999999999999" />
+         <parameter id="V1cdc20" name="V1cdc20" value="0.20999999999999999" />
+         <parameter id="V2cdc20" name="V2cdc20" value="0.34999999999999998" />
+         <parameter id="V1e2f" name="V1e2f" value="0.80500000000000005" />
+         <parameter id="V2e2f" name="V2e2f" value="0.69999999999999996" />
+         <parameter id="Md" name="Md" constant="false" />
+      </listOfParameters>
+      <listOfRules>
+         <assignmentRule variable="Md">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <times/>
+                              <ci> Kdd </ci>
+                              <ci> vsd </ci>
+                           </apply>
+                           <ci> GF </ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <cn> 0.10000000000000001 </cn>
+                           <ci> GF </ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci> Vdd </ci>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <times/>
+                              <ci> vsd </ci>
+                              <ci> GF </ci>
+                           </apply>
+                           <apply>
+                              <plus/>
+                              <cn> 0.10000000000000001 </cn>
+                              <ci> GF </ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+            </math>
+         </assignmentRule>
+      </listOfRules>
+      <listOfReactions>
+         <reaction  id="R_1" reversible="false">
+            <listOfProducts>
+               <speciesReference species="E2F" stoichiometry="1"/>
+            </listOfProducts>
+            <kineticLaw>
+               <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci> V1e2f </ci>
+                           <apply>
+                              <minus/>
+                              <ci> E2Ftot </ci>
+                              <ci> E2F </ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci> K1e2f </ci>
+                           <apply>
+                              <minus/>
+                              <ci> E2Ftot </ci>
+                              <ci> E2F </ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci> Md </ci>
+                        <ci> Me </ci>
+                     </apply>
+                  </apply>
+               </math>
+            </kineticLaw>
+         </reaction>
+         <reaction  id="R_2" reversible="false">
+            <listOfReactants>
+               <speciesReference species="E2F" stoichiometry="1"/>
+               <speciesReference species="Ma" stoichiometry="1"/>
+            </listOfReactants>
+            <listOfProducts>
+               <speciesReference species="Ma" stoichiometry="1"/>
+            </listOfProducts>
+            <kineticLaw>
+               <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci> V2e2f </ci>
+                        <apply>
+                           <plus/>
+                           <ci> K2e2f </ci>
+                           <ci> E2F </ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci> E2F </ci>
+                        <ci> Ma </ci>
+                     </apply>
+                  </apply>
+               </math>
+            </kineticLaw>
+         </reaction>
+         <reaction  id="R_3" reversible="false">
+            <listOfReactants>
+               <speciesReference species="E2F" stoichiometry="1"/>
+            </listOfReactants>
+            <listOfProducts>
+               <speciesReference species="E2F" stoichiometry="1"/>
+               <speciesReference species="Me" stoichiometry="1"/>
+            </listOfProducts>
+            <kineticLaw>
+               <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                     <times/>
+                     <ci> vse </ci>
+                     <ci> E2F </ci>
+                  </apply>
+               </math>
+            </kineticLaw>
+         </reaction>
+         <reaction  id="R_4" reversible="false">
+            <listOfReactants>
+               <speciesReference species="Ma" stoichiometry="1"/>
+               <speciesReference species="Me" stoichiometry="1"/>
+            </listOfReactants>
+            <listOfProducts>
+               <speciesReference species="Ma" stoichiometry="1"/>
+            </listOfProducts>
+            <kineticLaw>
+               <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci> Vde </ci>
+                        <apply>
+                           <plus/>
+                           <ci> Kde </ci>
+                           <ci> Me </ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci> Ma </ci>
+                        <ci> Me </ci>
+                     </apply>
+                  </apply>
+               </math>
+            </kineticLaw>
+         </reaction>
+         <reaction  id="R_5" reversible="false">
+            <listOfReactants>
+               <speciesReference species="E2F" stoichiometry="1"/>
+            </listOfReactants>
+            <listOfProducts>
+               <speciesReference species="E2F" stoichiometry="1"/>
+               <speciesReference species="Ma" stoichiometry="1"/>
+            </listOfProducts>
+            <kineticLaw>
+               <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                     <times/>
+                     <ci> vsa </ci>
+                     <ci> E2F </ci>
+                  </apply>
+               </math>
+            </kineticLaw>
+         </reaction>
+         <reaction  id="R_6" reversible="false">
+            <listOfReactants>
+               <speciesReference species="Cdc20" stoichiometry="1"/>
+               <speciesReference species="Ma" stoichiometry="1"/>
+            </listOfReactants>
+            <listOfProducts>
+               <speciesReference species="Cdc20" stoichiometry="1"/>
+            </listOfProducts>
+            <kineticLaw>
+               <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci> Vda </ci>
+                        <apply>
+                           <plus/>
+                           <ci> Kda </ci>
+                           <ci> Ma </ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci> Cdc20 </ci>
+                        <ci> Ma </ci>
+                     </apply>
+                  </apply>
+               </math>
+            </kineticLaw>
+         </reaction>
+         <reaction  id="R_7" reversible="false">
+            <listOfReactants>
+               <speciesReference species="Ma" stoichiometry="1"/>
+            </listOfReactants>
+            <listOfProducts>
+               <speciesReference species="Ma" stoichiometry="1"/>
+               <speciesReference species="Mb" stoichiometry="1"/>
+            </listOfProducts>
+            <kineticLaw>
+               <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                     <times/>
+                     <ci> vsb </ci>
+                     <ci> Ma </ci>
+                  </apply>
+               </math>
+            </kineticLaw>
+         </reaction>
+         <reaction  id="R_8" reversible="false">
+            <listOfReactants>
+               <speciesReference species="Cdc20" stoichiometry="1"/>
+               <speciesReference species="Mb" stoichiometry="1"/>
+            </listOfReactants>
+            <listOfProducts>
+               <speciesReference species="Cdc20" stoichiometry="1"/>
+            </listOfProducts>
+            <kineticLaw>
+               <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci> Vdb </ci>
+                        <apply>
+                           <plus/>
+                           <ci> Kdb </ci>
+                           <ci> Mb </ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci> Cdc20 </ci>
+                        <ci> Mb </ci>
+                     </apply>
+                  </apply>
+               </math>
+            </kineticLaw>
+         </reaction>
+         <reaction  id="R_9" reversible="false">
+            <listOfReactants>
+               <speciesReference species="Mb" stoichiometry="1"/>
+            </listOfReactants>
+            <listOfProducts>
+               <speciesReference species="Cdc20" stoichiometry="1"/>
+               <speciesReference species="Mb" stoichiometry="1"/>
+            </listOfProducts>
+            <kineticLaw>
+               <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <times/>
+                           <ci> V1cdc20 </ci>
+                           <ci> Mb </ci>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <ci> Cdc20tot </ci>
+                           <ci> Cdc20 </ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci> K1cdc20 </ci>
+                        <apply>
+                           <minus/>
+                           <ci> Cdc20tot </ci>
+                           <ci> Cdc20 </ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </math>
+            </kineticLaw>
+         </reaction>
+         <reaction  id="R_10" reversible="false">
+            <listOfReactants>
+               <speciesReference species="Cdc20" stoichiometry="1"/>
+            </listOfReactants>
+            <kineticLaw>
+               <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci> V2cdc20 </ci>
+                        <ci> Cdc20 </ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci> K2cdc20 </ci>
+                        <ci> Cdc20 </ci>
+                     </apply>
+                  </apply>
+               </math>
+            </kineticLaw>
+         </reaction>
+      </listOfReactions>
+   </model>
+</sbml>

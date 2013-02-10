@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 require "treetop"
-require "modelling/sassyparser"
+require "modelling/parser/sassyparser"
 module Modelling
 	# Model Class
 	class Model

@@ -20,4 +20,6 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency "rspec", "~> 2.6"
   gem.add_dependency "treetop", "~> 1.4"
+
+  gem.requirements << 'libSBML must be installed'
 end
