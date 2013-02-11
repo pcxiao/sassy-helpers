@@ -7,4 +7,9 @@ describe Modelling::SassyModel do
 		m = Modelling::Model.new
 		m.from_matlab('spec/testmodels/sassy/herzel')
 	end
+
+	it 'writes sassy models' do
+		
+	end
+
 end

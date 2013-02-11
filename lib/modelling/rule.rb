@@ -2,8 +2,13 @@
 module Modelling
 	# Rule class
 	class Rule
+		# output (Species or Parameter)
 		attr_reader :output
+
+		# the equation of the rule (equation  object)
 		attr_reader :equation
+
+		# type: 'scalar' or 'rate'
 		attr_accessor :type
 
 		def initialize(out, eqn, type = 'scalar')
