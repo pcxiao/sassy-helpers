@@ -5,14 +5,16 @@ module Modelling
 	grammar Sassy
 
 		rule root 
-			skip f:function skip
-			e:evalp skip
-			d:dydt skip <ParsedModelFile> {
+			c1:skip f:function c2:skip
+			e:evalp c3:skip
+			d:dydt c4:skip <ParsedModelFile> {
 				def value
 					validate(f.value, e.value, d.value)
 					{
 						:fname => f.value[:name],
 						:equations => d.value[:equations],
+						:comments_top => c1.value + c2.value + c3.value,
+						:comments_bottom => c4.value
 					}
 				end
 			}
@@ -21,7 +23,11 @@ module Modelling
 		# declare stuff that will be skipped
 		# (comments and empty lines)
 		rule skip
-			(comment / ws)*
+			(comment / ws)+ {
+				def value
+					elements.inject("") {|sum, e| sum = sum + e.value}
+				end
+			}
 		end
 
 		rule eof

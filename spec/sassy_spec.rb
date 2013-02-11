@@ -4,6 +4,6 @@ require "sassy-helpers"
 
 describe Modelling::SassyModel do
 	it 'loads sassy models' do 
-		Modelling::Model.new.from_matlab('spec/testmodels/sassy/herzel')
+		p Modelling::Model.new.from_matlab('spec/testmodels/sassy/herzel')
 	end
 end

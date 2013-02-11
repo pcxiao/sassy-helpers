@@ -7,6 +7,7 @@ module Modelling
 	class Species
 		attr_accessor :matlab_no
 		attr_accessor :name
+		attr_accessor :initial
 
 		@@insts = 1
 		def initialize(name, initial = nil, matlab_no = nil)

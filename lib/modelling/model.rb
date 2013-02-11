@@ -13,22 +13,30 @@ module Modelling
 		# an array of reactions
 		attr_accessor :reactions
 
-		# an array of parameters
+		# a hash of parameters
 		attr_accessor :parameters
 
-		# an array of species
+		# a hash of species
 		attr_accessor :species
 
 		# an array of rules
 		attr_accessor :rules
+
+		# notes about the model
+		attr_accessor :notes
+
+		# extra comment for sassy
+		attr_accessor :sassy_extra
 		
 		def initialize
 			@reactions = []
 			@rules = []
-			@parameters = []
-			@species = []
+			@parameters = {}
+			@species = {}
 			@name = "Model"
 			@parser = Modelling::SassyParser.new
+			@sassy_extra = ""
+			@notes = ""
 		end
 
 	end

@@ -25,6 +25,8 @@ module Modelling
 				.gsub(/\%.*([\n\r]+|$)/, "")	\
 				.gsub(/\s*([\/*])\s*/, '\1')	\
 				.gsub(/\s+/, " ")				\
+				.gsub(/\(\s+/, "(")				\
+				.gsub(/\s+\)/, ")")				\
 				.strip
 			raise "Empty formula" if @formula == ""
 			@formula
