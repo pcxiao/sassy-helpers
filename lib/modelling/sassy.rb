@@ -93,5 +93,10 @@ END
 			self.validate
 			self
 		end
+
+		# Write matlab files with model, parameters and initial values
+		def to_matlab(basepath)
+			
+		end
 	end
 end
