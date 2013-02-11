@@ -116,14 +116,14 @@ END
 				self.reactions_to_rules
 			end
 			File.open("#{basepath}.par", "w") do |f|
-				@parameters.each do |p|
+				@parameters.each do |n, p|
 					f.puts(p.to_par)
 				end
 			end
 			File.open("#{basepath}.y", "w") do |f|
 				mno = 1
-				@species = (@species.sort {|x,y| x.matlab_no <=> y.matlab_no })
-				@species.each do |sp|
+				@species = (@species.sort {|x,y| x[1].matlab_no <=> y[1].matlab_no })
+				@species.each do |n, sp|
 					f.puts("y#{sp.matlab_no} #{sp.initial}\n")
 					# redo matlab numbers
 					sp.matlab_no=(mno)
@@ -138,31 +138,37 @@ END
 				f.puts <<-END
 function dydt = f(t, y, p)
    
-% #{@notes}
+% #{@notes.gsub("%%%%-cb-%%%%", " ")}
 
 eval(p);
 
 dydt = [  
-
 END
 				species_eqns = []
+				species_comments = []
 				(@rules.sort {|x,y| x.output.matlab_no <=> y.output.matlab_no}).each do |rule|
 					eq = rule.equation.clone
-					@species.each do |s|
-						eq.rename_ident(s.name, "y(#{s.matlab_no})")
+					@species.each do |n,s|
+						eq.replace_ident(s.name, "y(#{s.matlab_no})")
 					end
-					species_rules[rule.output.matlab_no] = eq.to_s
+					species_comments[rule.output.matlab_no] = eq.comments.gsub("%%%%-cb-%%%%", " ")
+					species_eqns[rule.output.matlab_no] = eq.to_s
 				end
 
-				@species.each do |s|
+				@species.each do |n,s|
+					if species_comments[s.matlab_no]
+						f.puts("     % #{species_comments[s.matlab_no]}\n")
+					end
 					if species_eqns[s.matlab_no]
-						f.puts("\t #{species_eqns[s.matlab_no]} ;\n")
+						f.puts("     #{species_eqns[s.matlab_no]} ;\n")
 					else
 						puts("[W] Species #{s.name} has no rate rule, setting to zero.")
-						f.puts("\t 0 ;\n")
+						f.puts("     0 ;\n")
 					end
 				end
-				formatted_sassy_extra = @sassy_extra.gsub(/\%/, "\n%%")
+				formatted_sassy_extra = @sassy_extra.gsub("%%%%-cb-%%%%", "\n%") \
+					.gsub(/\n%$/, '')	\
+					.gsub(/%([^%])/, '% \1')
 				f.puts <<-END
 ]; 
 

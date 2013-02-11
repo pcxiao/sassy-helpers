@@ -23,7 +23,7 @@ module Modelling
 		# declare stuff that will be skipped
 		# (comments and empty lines)
 		rule skip
-			(comment / ws)+ {
+			(comment / ws)* {
 				def value
 					elements.inject("") {|sum, e| sum = sum + e.value}
 				end
@@ -41,7 +41,7 @@ module Modelling
 		rule comment
 			"%" c:((!eoc .)*) eoc {
 				def value 
-					c.text_value.strip
+					c.text_value.strip + " %%%%-cb-%%%%"
 				end
 			} / lcskip
 

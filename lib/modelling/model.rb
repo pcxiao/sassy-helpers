@@ -86,6 +86,8 @@ module Modelling
 
 			unused = idents.reject { |e| syms.key?(e)  }
 			unused = unused | (syms.keys.reject { |e| idents.index(e) })
+			# dawn dusk and force are in every model (at least after sassy opens it)
+			unused = unused.reject { |e| e == 'dawn' || e == 'dusk' || e == 'force' }
 			if unused.length > 0
 				puts "[W] Model has unused symbols: #{unused}\n"
 			end

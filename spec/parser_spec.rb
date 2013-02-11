@@ -23,7 +23,7 @@ describe Modelling::SassyParser do
 	end
 
 	it 'parses comments' do 
-		test_parse('% a test ', :comment).value.should eql('a test')
+		test_parse('% a test ', :comment).value.should eql('a test %%%%-cb-%%%%')
 		test_parse('... a test ', :comment).value.should eql('a test')
 	end
 

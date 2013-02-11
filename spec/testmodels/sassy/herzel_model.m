@@ -1,5 +1,3 @@
-% Automatically converted model file: leloup03
-
 function dydt = f(t, y, p)
    
 % Herzel Mammalian Clock model equations
