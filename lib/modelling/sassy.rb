@@ -38,17 +38,17 @@ END
 			@parameters = {}
 			@species = {}
 
-			mdata[:equations].map { |e, i| @species["y_#{i+1}"] = Species.new("y_#{i+1}", 0, i+1) }
+			mdata[:equations].each_with_index.map { |e, i| @species["y_#{i+1}"] = Species.new("y_#{i+1}", 0, i+1) }
 
 			# rename species
-			eqns = mdata[:equations].map { |e| Equation.new(e) }
+			eqns = mdata[:equations].map { |e| Equation.new(e[:equation], e[:comments]) }
 			eqns.each do |eq|
-				@species.each do |spec|
-					eqns.replace_ident("y(#{spec.matlab_no})", spec.name)
+				@species.each do |name, spec|
+					eq.replace_ident("y(#{spec.matlab_no})", spec.name)
 				end
 			end
 
-			@rules = mdata[:equations].enum_with_index.map { |e, i|
+			@rules = mdata[:equations].each_with_index.map { |e, i|
 			 	Rule.new(@species["y_#{i+1}"], eqns[i], 'rate') 
 			}
 
@@ -60,6 +60,14 @@ END
 				@parameters[pname] = Parameter.new(pname, pval.to_f, comment)
 			end
 
+			if File.exists?(initvals)
+				File.open(initvals).each do |l|
+					l.match(/^y([0-9]+)\s+(.*)$/) {|m| @species["y_#{$1}"].initial=($2).to_f}
+				end
+			end
+
+			self.validate
+			self
 		end
 	end
 end

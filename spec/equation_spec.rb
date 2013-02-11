@@ -16,6 +16,24 @@ describe Modelling::Equation do
 		)
   end
 
+  it "finds identifiers" do
+	p = Modelling::Equation.new("(1-transcription)*V_3max*((1 + g*(y_1/k_t3)^v)/(1 + ((y_18 + y_19)/k_i3)^w*(y_1/k_t3)^v + (y_1/k_t3)^v)) - d_y3*y_2")
+	q = p.all_idents.sort
+	q.should eql([
+		"transcription",
+		"V_3max",
+		"g",
+		"y_1",
+		"k_t3",
+		"v",
+		"y_18",
+		"y_19",
+		"k_i3",
+		"d_y3",
+		"y_2"
+		].sort)
+  end
+
   it "recognises identifiers" do
 	p = Modelling::Equation.new("ay * cyc ...\n + y % linear eqn")
 	p.has_ident?('y').should eql(true)

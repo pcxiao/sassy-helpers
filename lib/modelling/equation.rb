@@ -4,9 +4,10 @@ module Modelling
 	class Equation
 		attr_accessor :formula
 		attr_accessor :name
+		attr_accessor :comments
 
 		@@insts = 1
-		def initialize(eq = nil)
+		def initialize(eq = nil, comment = "")
 			@name = "equation_#{@@insts}"
 
 			if eq
@@ -14,6 +15,7 @@ module Modelling
 			else
 				@formula = "1"
 			end
+			@comments = comment
 			@@insts += 1
 		end
 
@@ -36,12 +38,19 @@ module Modelling
 		# 
 		# Replace an identifier and make sure it's a whole word
 		def replace_ident(oldid, newid)
-			@formula = @formula.gsub(/(^|[\s]|[^_A-Za-z0-9])#{Regexp.quote(oldid)}($|[\s]|[^_A-Za-z0-9])/) { $1 + newid + $2}
+			@formula = @formula.gsub(/(^|[^_A-Za-z0-9])#{Regexp.quote(oldid)}($|[^_A-Za-z0-9])/) { $1 + newid + $2}
 		end
 
 		# Check if formula has an identifier
 		def has_ident?(id)
-			!@formula.match(/(^|[\s]|[^_A-Za-z0-9])#{Regexp.quote(id)}($|[\s]|[^_A-Za-z0-9])/).nil?
+			!@formula.match(/(^|[^_A-Za-z0-9])#{Regexp.quote(id)}($|[^_A-Za-z0-9])/).nil?
+		end
+
+		# get all identifiers in this formula
+		def all_idents
+			idents = []
+			@formula.scan(/(^|[^_A-Za-z0-9])([A-Za-z_][_A-Za-z0-9]*)($|[^_A-Za-z0-9])/) {|x| idents.push($2)}
+			idents.uniq
 		end
 
 		def to_s
