@@ -6,6 +6,5 @@ describe Modelling::SassyModel do
 	it 'loads sassy models' do 
 		m = Modelling::Model.new
 		m.from_matlab('spec/testmodels/sassy/herzel')
-		# p m
 	end
 end

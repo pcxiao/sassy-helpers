@@ -49,7 +49,7 @@ module Modelling
 		# get all identifiers in this formula
 		def all_idents
 			idents = []
-			@formula.scan(/(^|[^_A-Za-z0-9])([A-Za-z_][_A-Za-z0-9]*)($|[^_A-Za-z0-9])/) {|x| idents.push($2)}
+			@formula.scan(/([A-Za-z_][_A-Za-z0-9]*)/) {|x| idents.push($1)}
 			idents.uniq
 		end
 

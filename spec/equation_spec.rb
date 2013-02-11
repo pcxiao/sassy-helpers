@@ -26,6 +26,7 @@ describe Modelling::Equation do
 		"y_1",
 		"k_t3",
 		"v",
+		"w",
 		"y_18",
 		"y_19",
 		"k_i3",
