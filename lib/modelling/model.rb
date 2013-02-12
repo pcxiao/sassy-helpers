@@ -93,5 +93,20 @@ module Modelling
 			end
 		end
 
+		# Turn a parameter into a species
+		# Returns: the Species object of the newly generated species
+		def parameter_to_species(pname)
+			raise "Unknown parameter #{pname}" if not @parameters.key?(pname)
+			matlab_number = @species.values.inject (1) { |mem, var| mem < var.matlab_no ? var.matlab_no + 1 : mem }
+			raise "Species #{pname} already exists, cannot replace." if @species.key?(pname)
+
+			p = @parameters.delete pname
+			spec = Species.new(pname, p.value, matlab_number)
+			@species[pname] = spec
+
+			self.validate
+			spec
+		end
+
 	end
 end

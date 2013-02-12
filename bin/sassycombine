@@ -2,8 +2,8 @@
 
 # Combine multiple models into one
 
-require "rubygems"
-require "bundler/setup"
+require 'rubygems'
+require 'bundler/setup'
 
 require 'optparse'
 require 'sassy-helpers'
@@ -15,7 +15,7 @@ options = {
 OptionParser.new do |opts|
 	opts.banner = "Usage: sassycombine [files] [options]"
 
-	opts.on("--output NAME", String, "Output base name -- must be specified to write something, otherwise will only dry-run.") do |n|
+	opts.on("--output NAME", String, "Output base name -- must be specified to write something") do |n|
         options[:output] = n
     end
 	
@@ -29,8 +29,27 @@ OptionParser.new do |opts|
 	# will be turned into a species which cannot be overwritten without
 	# an error)
 	# 
+	# each of these must be a triple like this:
+	#
+	#   2:para:y1
+	#
+	# makes a species from parameter "para", and uses the equation from
+	# species y1 in model 2 (the second model that was read)
+
 	opts.on("--couple x,y,z", Array, "List of coupling parameters") do |list|
-		options[:coupling_parameters] = list
+		couplings = {}
+		list.each do |d|
+			d.match(/([0-9]+)\:([A-Za-z0-9\_]+)\:([A-Za-z0-9\_]+)/) do |m|
+				if couplings[$1].nil?
+					couplings[$1] = []
+				end
+				couplings[$1].push({ :parameter => $2, :species => $3 })
+			end
+			if couplings.length == 0 then 
+				raise "Coupling parameters must be specified as <model>:<parameter>:<species> blocks, e.g. 2:para:y2!"
+			end
+			options[:couplings] = couplings
+		end
 	end
 	
 	opts.on_tail("-h", "--help", "Show this message") do
@@ -51,11 +70,11 @@ else
 	files = ARGV
 end
 
+p options
+
 raise "No inputs specified" if files.length == 0
 
 m = Modelling::Model.new
-
-pp options
 
 # files.each do |f|
 # 	m.from_sassy(f)
