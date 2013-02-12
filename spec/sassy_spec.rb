@@ -6,7 +6,7 @@ require 'tempfile'
 describe Modelling::SassyModel do
 	it 'loads sassy models' do 
 		m = Modelling::Model.new
-		m.from_matlab('spec/testmodels/sassy/herzel')
+		m.from_sassy('spec/testmodels/sassy/herzel')
 	end
 
 	it 'writes sassy models' do
@@ -17,9 +17,9 @@ describe Modelling::SassyModel do
 
 		begin
 			m = Modelling::Model.new
-			m.from_matlab('spec/testmodels/sassy/herzel')
+			m.from_sassy('spec/testmodels/sassy/herzel')
 
-			m.to_matlab(p)
+			m.to_sassy(p)
 
 			modeltext = File.read(p + "_model.m")
 			modeltext.should eql( "function dydt = f(t, y, p)\n   \n% Herzel Mammalian Clock model equations  \n\neval(p);\n\ndydt = [  \n     % y(1) == x1 -> CLOCK/BMAL  \n     kf_x1*y(10) - kd_x1*y(1) - d_x1*y(1) ;\n     % y(2) == y3 -> Rev-Erb  \n     (1-transcription)*V_3max*((1 + g*(y(1)/k_t3)^v)/(1 + ((y(18) + y(19))/k_i3)^w*(y(1)/k_t3)^v + (y(1)/k_t3)^v)) - d_y3*y(2) ;\n     % y(3) == y4 -> ROR  \n     (1-transcription)*V_4max*((1 + h*(y(1)/k_t4)^p)/(1 + ((y(18) + y(19))/k_i4)^q*(y(1)/k_t4)^p + (y(1)/k_t4)^p)) - d_y4*y(3) ;\n     % y(4) == z6 -> REV-ERB-c  \n     k_p3*(y(2) + y3_0) - ki_z6*y(4) - d_z6*y(4) ;\n     % y(5) == z7 -> ROR-c  \n     k_p4*(y(3) + y4_0) - ki_z7*y(5) - d_z7*y(5) ;\n     % y(6) == x5 -> REV-ERB-n  \n     ki_z6*y(4) - d_x5*y(6) ;\n     % y(7) == x6 -> ROR-n  \n     ki_z7*y(5) - d_x6*y(7) ;\n     % y(8) == y5 -> BMAL  \n     (1-transcription)*V_5max*((1 + ii*(y(7)/k_t5)^n)/(1 + (y(6)/k_i5)^m + (y(7)/k_t5)^n)) - d_y5*y(8) ;\n     % y(9) == z8 -> BMAL-c  \n     k_p5*(y(8) + y5_0) - ki_z8*y(9) - d_z8*y(9) ;\n     % y(10) == x7 -> BMAL-n  \n     ki_z8*y(9) + kd_x1*y(1) - kf_x1*y(10) - d_x7*y(10) ;\n     % y(11) == y1 -> Per  \n     (1-transcription)*(1+force*amp)*V_1max*((1 + a*(y(1)/k_t1)^b)/(1 + ((y(18) + y(19))/k_i1)^c*(y(1)/k_t1)^b + (y(1)/k_t1)^b)) - d_y1*y(11) ;\n     % y(12) == y2 -> Cry  \n     (1-transcription)*V_2max*((1 + d*(y(1)/k_t2)^e)/(1 + ((y(18) + y(19))/k_i2)^f*(y(1)/k_t2)^e + (y(1)/k_t2)^e))*1/(1 + (y(6)/k_i21)^f1) - d_y2*y(12) ;\n     % y(13) == z1 -> CRY-c  \n     k_p2*(y(12) + y2_0) + kd_z4*y(16) + kd_z5*y(17) - kf_z5*y(13)*y(14) - kf_z4*y(13)*y(15) - d_z1*y(13) ;\n     % y(14) == z2 -> PER-c  \n     k_p1*(y(11) + y1_0) + kd_z5*y(17) + kd_phz3*y(15) - kf_z5*y(14)*y(13) - kph_z2*y(14) - d_z2*y(14) ;\n     % y(15) == z3 -> PER-c*  \n     kph_z2*y(14) + kd_z4*y(16) - kd_phz3*y(15) - kf_z4*y(15)*y(13) - d_z3*y(15) ;\n     % y(16) == z4 -> PER-c*/CRY-c  \n     kf_z4*y(13)*y(15) + ke_x2*y(18) - ki_z4*y(16) - kd_z4*y(16) - d_z4*y(16) ;\n     % y(17) == z5 -> PER-c/CRY-c  \n     kf_z5*y(13)*y(14) + ke_x3*y(19) - ki_z5*y(17) - kd_z5*y(17) - d_z5*y(17) ;\n     % y(18) == x2 -> PER-n*/CRY-n  \n     ki_z4*y(16) - ke_x2*y(18) - d_x2*y(18) ;\n     % y(19) == x3 -> PER-n/CRY-n  \n     ki_z5*y(17) - ke_x3*y(19) - d_x3*y(19) ;\n]; \n\n% ======================================================================= \n% the information below is written into the file name.info and is used to \n% communicate whether the system is an oscillator or a signalling system, \n% which ode solver method to use, the end time is teh system is a signal, \n% the force type used from the file /shared/theforce and wherther the \n% solutions should be non-negative or not. The %%%  before \n% each line is needed. Using %%% info lines it can also be used to store away \n% other information. In this case the title of the model and the initial \n% condition that is used. \n%%% info Herzel Mammalian Clock model equations \n%%% method ode45 \n%%% positivity non-negative \n%%% orbit_type oscillator \n% ======================================================================= \n\nend\n")

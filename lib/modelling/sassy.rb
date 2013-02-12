@@ -15,7 +15,7 @@ module Modelling
 		# initvals          : optional initial values file
 		# species_prefix    : prefix for the species names
 		# parameter_prefix  : prefix for the parameter names
-		def from_matlab(basepath, parameters = nil, initvals = nil, species_prefix = "", parameter_prefix = "")
+		def from_sassy(basepath, parameters = nil, initvals = nil, species_prefix = "", parameter_prefix = "")
 			if parameters.nil?
 				parameters = "#{basepath}.par"
 			end
@@ -111,7 +111,7 @@ END
 		# Write matlab files with model, parameters and initial values
 		# 
 		# This will convert reactions into rules
-		def to_matlab(basepath)
+		def to_sassy(basepath)
 			if @reactions.length > 0
 				self.reactions_to_rules
 			end
