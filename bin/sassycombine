@@ -2,6 +2,9 @@
 
 # Combine multiple models into one
 
+require "rubygems"
+require "bundler/setup"
+
 require 'optparse'
 require 'sassy-helpers'
 
