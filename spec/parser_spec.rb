@@ -43,6 +43,12 @@ describe Modelling::SassyParser do
 		test_parse('( a , b,c)', :identtuple).value.should eql(['a', 'b', 'c'])
 	end
 
+	it 'parses parameter assignments' do
+		test_parse('x = 3*y(1); ', :pareqn).value.should eql({:output=>"x", :equation=>"3*y(1)", :comment=>""})
+		test_parse("x = ...inline comment\n  3*y(1) ;", :pareqn).value.should eql({:output=>"x", :equation=>"3*y(1)", :comment=>"inline comment"})
+		test_parse("% x is being assigned here\n x = ...inline comment\n  3*y(1) ;", :pareqn).value.should eql({:output=>"x", :equation=>"3*y(1)", :comment=>"x is being assigned here %%%%-cb-%%%%inline comment"})
+	end
+
 	it 'parses function defs' do 
 		test_parse("function x = f(a, b)", :function).value.should eql({
 			:name => 'f',
@@ -61,5 +67,14 @@ describe Modelling::SassyParser do
 		vv.should_not eql(nil)
 		vv[:fname].should eql("f")
 		vv[:equations].length.should eql(19)
+	end
+
+	it 'parses all sassy models' do
+		puts("\nTest-importing models\n")
+		Dir["spec/testmodels/sassy/*model.m"].each do |fn|
+			puts "#{fn}"
+			vv = test_parse(File.read(fn), :root).value
+			vv.should_not eql(nil)
+		end
 	end
 end

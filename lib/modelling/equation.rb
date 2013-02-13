@@ -38,7 +38,10 @@ module Modelling
 		# 
 		# Replace an identifier and make sure it's a whole word
 		def replace_ident(oldid, newid)
-			@formula = @formula.gsub(/(^|[^_A-Za-z0-9])#{Regexp.quote(oldid)}($|[^_A-Za-z0-9])/) { $1 + newid + $2}
+			# sometimes matches overlap, so we do it a few times
+			while @formula.match(/(^|[^_A-Za-z0-9])#{Regexp.quote(oldid)}($|[^_A-Za-z0-9])/)
+				@formula = @formula.gsub(/(^|[^_A-Za-z0-9])#{Regexp.quote(oldid)}($|[^_A-Za-z0-9])/) { $1 + newid + $2}
+			end
 		end
 
 		# Check if formula has an identifier

@@ -35,11 +35,18 @@ OptionParser.new do |opts|
 	#
 	# makes a species from parameter "para", and uses the equation from
 	# species y1 in model 2 (the second model that was read)
+	# 
+	# Note that we can only have coupling parameters after the second
+	# model was read (we cannot convert parameters in the first model)
+	# to a species.
 
 	opts.on("--couple x,y,z", Array, "List of coupling parameters") do |list|
 		couplings = {}
 		list.each do |d|
 			d.match(/([0-9]+)\:([A-Za-z0-9\_]+)\:([A-Za-z0-9\_]+)/) do |m|
+				if $1.to_i < 2 
+					raise "Cannot have coupling parameters before the second model"
+				end
 				if couplings[$1].nil?
 					couplings[$1] = []
 				end
@@ -76,9 +83,19 @@ raise "No inputs specified" if files.length == 0
 
 m = Modelling::Model.new
 
-# files.each do |f|
-# 	m.from_sassy(f)
+index = 1
+files.each do |f|
+ 	m.from_sassy(f)
 
-# 	params = m.parameters.keys
+ 	# if couplings[index.to_s]
+ 	# 	couplings[index.to_s].each do |cp|
+ 	# 		# turn parameter to species in new model
+ 	# 		m.replace_symbol(cp[:parameter], cp[:species])
+ 	# 	end
+ 	# end
 
-# end
+ 	params = m.parameters.keys
+ 	index = index + 1
+end
+
+m.to_sassy('test')

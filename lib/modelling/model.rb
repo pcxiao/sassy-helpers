@@ -108,5 +108,46 @@ module Modelling
 			spec
 		end
 
+		# get a symbol (species or parameter) object
+		def get_symbol(sym)
+			if @parameters.key?(sym)
+				return @parameters[sym]
+			elsif @spec
+				return @species[sym]
+			else
+				raise "Symbol #{sym} not found in model"
+			end
+		end
+
+		# Test if model has a certain symbol
+		def has_symbol?(sym)
+			@parameters.key?(sym) or @species.key?(sym)
+		end
+
+		# Replace a symbol in all equations
+		# Removes the object for sym and returns it
+		def replace_symbol(sym, new_sym)
+			syo = get_symbol(sym)
+			syn = get_symbol(new_sym)
+
+			@rules.each do |r|
+				r.equation.replace_ident(sym, new_sym)
+			end
+
+			@reactions.each do |r|
+				r.equation.replace_ident(sym, new_sym)
+			end
+
+			if @parameters[sym]
+				@parameters.delete(sym)
+			else
+				@species.delete(sym)
+			end
+
+			self.validate
+
+			syo
+		end
+
 	end
 end

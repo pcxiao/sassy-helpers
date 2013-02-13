@@ -3,10 +3,10 @@ module Modelling
 	# Rule class
 	class Rule
 		# output (Species or Parameter)
-		attr_reader :output
+		attr_accessor :output
 
 		# the equation of the rule (equation  object)
-		attr_reader :equation
+		attr_accessor :equation
 
 		# type: 'scalar' or 'rate'
 		attr_accessor :type

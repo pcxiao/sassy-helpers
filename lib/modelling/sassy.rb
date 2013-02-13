@@ -32,7 +32,6 @@ module Modelling
 Error parsing #{model}, reason:
 #{@@sassyparser.failure_reason}
 #{@@sassyparser.failure_line}:#{@@sassyparser.failure_column}
-
 END
 			end
 			mdata = mdata.value
@@ -52,11 +51,7 @@ END
 				@notes = @notes + mdata[:comments_top]
 			end
 
-			if @sassy_extra.nil?
-				@sassy_extra = mdata[:comments_bottom]
-			else
-				@sassy_extra = @sassy_extra + mdata[:comments_bottom]
-			end
+			@sassy_extra = mdata[:sassyfooter]
 
 			species_offset = @species.length
 
@@ -96,13 +91,36 @@ END
 					end
 				end
 			end
-			@parameters.each do |k, p|
-				p.name=(k)
+
+			idx = -mdata[:rules].length
+			mdata[:rules].each do |r|
+				if @species.key? r[:output]
+					raise "Cannot assign species values in sassy rules"
+				end
+				if not @parameters.key? r[:output]
+					@parameters[r[:output]] = Parameter.new(r[:output], 0, r[:comment])
+				end
+				eq = Equation.new(r[:equation], r[:comment])
+				@species.each do |name, spec|
+					eq.replace_ident("y(#{spec.matlab_no})", spec.name)
+				end
+				if parameter_prefix != ""
+					@parameters.each do |k,p|
+						eq.replace_ident(k, p.name)
+					end
+				end
+
+				@rules.push (Rule.new(@parameters[r[:output]], eq, 'scalar'))
 			end
 
 			mdata[:equations].each_with_index.map { |e, i|
 			 	@rules.push (Rule.new(@species["#{species_prefix}y_#{i+1}"], eqns[i], 'rate')) 
 			}
+
+			# fix parameters
+			@parameters.each do |k, p|
+				p.name=(k)
+			end
 
 			self.validate
 			self
@@ -132,28 +150,45 @@ END
 			end
 			File.open("#{basepath}_model.m", "w") do |f|
 				@rules.each do |rule| 
-					raise "Cannot export parameter rules to Sassy format" unless rule.output.kind_of? Species
-					raise "Cannot export scalar rules to Sassy format" unless rule.type == 'rate'
+					if rule.type == 'scalar' and rule.output.kind_of?(Species)
+						raise "Cannot export scalar species rules to Sassy format"
+					end
+					if rule.type == 'rate' and rule.output.kind_of?(Parameter)
+						raise "Parameters cannot have rate rules"
+					end
 				end
 				f.puts <<-END
 function dydt = f(t, y, p)
    
-% #{@notes.gsub("%%%%-cb-%%%%", " ")}
+% #{@notes.gsub("%%%%-cb-%%%%", "\n% ")}
 
 eval(p);
 
-dydt = [  
 END
 				species_eqns = []
 				species_comments = []
-				(@rules.sort {|x,y| x.output.matlab_no <=> y.output.matlab_no}).each do |rule|
-					eq = rule.equation.clone
-					@species.each do |n,s|
-						eq.replace_ident(s.name, "y(#{s.matlab_no})")
+				((@rules.reject { |e| e.output.kind_of? Parameter}) \
+					.sort {|x,y| x.output.matlab_no <=> y.output.matlab_no}) \
+				    .each do |rule|					
+						eq = rule.equation.clone
+						@species.each do |n,s|
+							eq.replace_ident(s.name, "y(#{s.matlab_no})")
+						end
+						species_comments[rule.output.matlab_no] = eq.comments.gsub("%%%%-cb-%%%%", " ")
+						species_eqns[rule.output.matlab_no] = eq.to_s
 					end
-					species_comments[rule.output.matlab_no] = eq.comments.gsub("%%%%-cb-%%%%", " ")
-					species_eqns[rule.output.matlab_no] = eq.to_s
-				end
+
+				(@rules.reject { |e| e.output.kind_of? Species}) \
+				    .each do |rule|					
+						eq = rule.equation.clone
+						@species.each do |n,s|
+							eq.replace_ident(s.name, "y(#{s.matlab_no})")
+						end
+						
+						f.puts ("% " + eq.comments.gsub("%%%%-cb-%%%%", " ") + "\n#{rule.output.name} = "  + eq.to_s + ";\n")
+					end
+
+				f.puts("\ndydt = [ \n")
 
 				@species.each do |n,s|
 					if species_comments[s.matlab_no]
@@ -174,7 +209,6 @@ END
 
 % #{formatted_sassy_extra}
 
-end
 END
 			end
 		end

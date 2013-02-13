@@ -5,16 +5,30 @@ module Modelling
 	grammar Sassy
 
 		rule root 
-			c1:skip f:function c2:skip
-			e:evalp c3:skip
-			d:dydt c4:skip <ParsedModelFile> {
+			c1:skip? f:function c2:skip?
+			e:evalp
+			rules:pareqns
+			c3:skip?
+			d:dydt footer:(.*) <ParsedModelFile> {
 				def value
 					validate(f.value, e.value, d.value)
+					ctop = ""
+					cbot = footer.text_value
+					if c1 
+						ctop = ctop + c1.value
+					end
+					if c2 
+						ctop = ctop + c2.value
+					end
+					if c3 
+						ctop = ctop + c3.value
+					end
 					{
 						:fname => f.value[:name],
+						:rules => rules.value,
 						:equations => d.value[:equations],
-						:comments_top => c1.value + c2.value + c3.value,
-						:comments_bottom => c4.value
+						:comments_top => ctop,
+						:sassyfooter => cbot
 					}
 				end
 			}
@@ -72,9 +86,35 @@ module Modelling
 			}
 		end
 
+		# parameter equations 
+		rule pareqns
+			(pareqn)* {
+				def value
+					elements.map {|el| el.value}
+				end
+			}
+		end
+
+		rule pareqn
+			cs:skip? ident ws? "=" ws? x:equation ";" ws? {
+				def value
+					co = ""
+					if cs
+						co = co + cs.value
+					end
+					co = co + x.value[:comments]
+					{
+						:output => ident.text_value,
+						:equation => x.value[:equation].strip,
+						:comment => co
+					}
+				end
+			}
+		end
+
 		# evaluate the parameter assignments statement
 		rule evalp 
-			"eval" lcws? idt:identtuple ";"? {
+			"eval" lcws? idt:identtuple ";" {
 				def value
 					idt.value
 				end
@@ -132,7 +172,7 @@ module Modelling
 				end
 
 				} /
-			[^;\]]+ {
+			[^;\[\]]+ {
 				def value
 				{
 					:equation => text_value,
