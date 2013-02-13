@@ -28,12 +28,12 @@ module Modelling
 		# extra comment for sassy
 		attr_accessor :sassy_extra
 		
-		def initialize
+		def initialize(_name = "Model")
 			@reactions = []
 			@rules = []
 			@parameters = {}
 			@species = {}
-			@name = "Model"
+			@name = _name
 			@parser = Modelling::SassyParser.new
 			@sassy_extra = ""
 			@notes = ""
@@ -51,10 +51,23 @@ module Modelling
 			syms.each do |k, v|
 				raise "Symbol #{v.to_s} mapped to wrong id: #{k}" if v.name != k
 			end
+
+			rule_output_names = {}
+
 			@rules.each do |rule|
+				if rule_output_names.key? (rule.output.name)
+					raise "Two rules for one output (#{rule.output.name})"
+				end
+				rule_output_names[rule.output.name] = 1
+
 				if !syms.key?(rule.output.name)
 					raise "rule #{rule.to_s} has undefined output: #{rule.output.name}"
 				end
+
+				if syms[rule.output.name] != rule.output
+					raise "Inconsistent model: rule #{rule.to_s} does not output to the correct variable #{syms[rule.output.name]}"
+				end
+
 				rule.equation.all_idents.each do |id|
 					idents = idents | [id]
 					if !syms.key?(id)
@@ -151,7 +164,51 @@ module Modelling
 
 		# Combine with another model
 		def combine_with(m2)
-			
+			m2 = m2.make_copy
+
+			@name = @name + " & " + m2.name
+
+			max_matlab_no = @species.inject(1) do |mval, s|
+				[mval, s.matlab_no].max
+			end
+
+			m2.species.each do |n,sp|
+				if @species.key?(n)
+					raise "Cannot combine models, duplicate species #{n}"
+				end
+
+				# if we have a parameter by this name, turn it into a species
+				if @parameters.key?(n)
+					@parameters.delete(n)
+				end
+
+				sp.matlab_no=(sp.matlab_no + max_matlab_no)
+				@species[n] = sp
+			end
+
+			m2.parameters.each do |n, p|
+				# We only get parameters which are not already species
+				if not @species.key?(n)
+					if @parameters.key?[n]
+						raise "Cannot combine models, duplicate parameter #{n}"
+					end
+					@parameters[n] = p
+				end
+			end				
+
+			# keep only rules for things which haven't been turned from parameter to species
+			@rules = @rules | m2.rules.reject { |r| m2.parameters.key?(r.output.name) and @species.key?(r.output.name) }
+
+			# reactions we can just concatenate
+			@reactions = @reactions | m2.reactions
+
+			self.validate
+			self
+		end
+
+		# Deep copy via Marshalling
+		def make_copy
+			Marshal.load(Marshal.dump(self))
 		end
 
 	end
