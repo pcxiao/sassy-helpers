@@ -149,5 +149,10 @@ module Modelling
 			syo
 		end
 
+		# Combine with another model
+		def combine_with(m2)
+			
+		end
+
 	end
 end

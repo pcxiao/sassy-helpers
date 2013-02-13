@@ -13,9 +13,9 @@ module Modelling
 		# basepath          : the base path to the model (suffixed with _model.m to get the file name)
 		# parameters        : the name of the parameters file (optional)
 		# initvals          : optional initial values file
-		# species_prefix    : prefix for the species names
-		# parameter_prefix  : prefix for the parameter names
-		def from_sassy(basepath, parameters = nil, initvals = nil, species_prefix = "", parameter_prefix = "")
+		def from_sassy(basepath, parameters = nil, initvals = nil)
+			# reset object
+			initialize
 			if parameters.nil?
 				parameters = "#{basepath}.par"
 			end
@@ -56,10 +56,10 @@ END
 			species_offset = @species.length
 
 			mdata[:equations].each_with_index.map do |e, i| 
-				if @species["#{species_prefix}y_#{i+1}"]
-					raise "Duplicate species #{species_prefix}y_#{i+1}\n"
+				if @species["y_#{i+1}"]
+					raise "Duplicate species y_#{i+1}\n"
 				end
-				@species["#{species_prefix}y_#{i+1}"] = Species.new("#{species_prefix}y_#{i+1}", 0, i+1+species_offset) 
+				@species["y_#{i+1}"] = Species.new("y_#{i+1}", 0, i+1+species_offset) 
 			end
 
 			File.open(parameters, "r").each do |l|
@@ -67,15 +67,15 @@ END
 				pname = lspl.shift
 				pval = lspl.shift
 				comment = lspl.join(" ").gsub(/^"/, "").gsub(/"$/, "").gsub(/\\"/, "\"")
-				if @parameters[parameter_prefix+pname]
-					puts "[W] Identical name for parameter #{parameter_prefix+pname}\n"
+				if @parameters[pname]
+					puts "[W] Identical name for parameter #{pname}\n"
 				end
-				@parameters[parameter_prefix+pname] = Parameter.new(pname, pval.to_f, comment)
+				@parameters[pname] = Parameter.new(pname, pval.to_f, comment)
 			end
 
 			if File.exists?(initvals)
 				File.open(initvals).each do |l|
-					l.match(/^y([0-9]+)\s+(.*)$/) {|m| @species["#{species_prefix}y_#{$1}"].initial=($2).to_f}
+					l.match(/^y([0-9]+)\s+(.*)$/) {|m| @species["y_#{$1}"].initial=($2).to_f}
 				end
 			end
 
@@ -84,11 +84,6 @@ END
 			eqns.each do |eq|
 				@species.each do |name, spec|
 					eq.replace_ident("y(#{spec.matlab_no})", spec.name)
-				end
-				if parameter_prefix != ""
-					@parameters.each do |k,p|
-						eq.replace_ident(k, p.name)
-					end
 				end
 			end
 
@@ -104,17 +99,12 @@ END
 				@species.each do |name, spec|
 					eq.replace_ident("y(#{spec.matlab_no})", spec.name)
 				end
-				if parameter_prefix != ""
-					@parameters.each do |k,p|
-						eq.replace_ident(k, p.name)
-					end
-				end
 
 				@rules.push (Rule.new(@parameters[r[:output]], eq, 'scalar'))
 			end
 
 			mdata[:equations].each_with_index.map { |e, i|
-			 	@rules.push (Rule.new(@species["#{species_prefix}y_#{i+1}"], eqns[i], 'rate')) 
+			 	@rules.push (Rule.new(@species["y_#{i+1}"], eqns[i], 'rate')) 
 			}
 
 			# fix parameters
