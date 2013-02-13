@@ -42,6 +42,7 @@ module Modelling
 			while @formula.match(/(^|[^_A-Za-z0-9])#{Regexp.quote(oldid)}($|[^_A-Za-z0-9])/)
 				@formula = @formula.gsub(/(^|[^_A-Za-z0-9])#{Regexp.quote(oldid)}($|[^_A-Za-z0-9])/) { $1 + newid + $2}
 			end
+			@formula
 		end
 
 		# Check if formula has an identifier
