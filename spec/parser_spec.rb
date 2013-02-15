@@ -20,6 +20,7 @@ describe Modelling::SassyParser do
 		test_parse('a', :ident).text_value.should eql('a')
 		test_parse('a123', :ident).text_value.should eql('a123')
 		test_parse('a_123', :ident).text_value.should eql('a_123')
+		test_parse('f(10)', :ident).text_value.should eql('f(10)')
 	end
 
 	it 'parses comments' do 

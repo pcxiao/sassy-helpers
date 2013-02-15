@@ -21,21 +21,6 @@ module Modelling
 			raise 'Rule type must be "rate" or "scalar"' if @type != 'rate' && @type != 'scalar'
 		end
 
-		# write SBML
-		def to_sbml
-			el = nil
-			if @output.kind_of? Species
-				el = REXML::Element::new 'speciesConcentrationRule'
-				el.add_attribute('species', @output.name)
-			else # output is parameter
-				el = REXML::Element::new 'parameterRule'				
-				el.add_attribute('name', @output.name)
-			end
-			el.add_attribute('type', @type)
-			el.add_attribute('formula', @equation.to_s)
-			el
-		end
-
 		def to_s
 			if @type == 'rate'
 				"d#{@output.name}/dt = #{@equation.to_s}"	

@@ -19,6 +19,7 @@ Gem::Specification.new do |gem|
   gem.version       = SassyHelpers::VERSION
 
   gem.add_development_dependency "rspec", "~> 2.6"
+  gem.add_development_dependency "awesome_print"
   gem.add_dependency "treetop", "~> 1.4"
   gem.add_dependency "nokogiri"
 

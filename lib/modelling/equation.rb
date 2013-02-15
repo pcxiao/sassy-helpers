@@ -2,6 +2,15 @@
 module Modelling
 	# Equation class
 	class Equation
+
+		# things which can't be used as identifiers
+		# because they are built-in functions in MATLAB
+		RESERVED_IDENTS = [
+			"sin", "asin", "cos", "acos", "tan", "atan", "atan2",
+			"sinh", "asinh", "cosh", "acosh", "tanh", "atanh", 
+			"log", "log2", "log10", "pow", "exp", "sqrt", "pi"
+			];
+
 		attr_accessor :formula
 		attr_accessor :name
 		attr_accessor :comments
@@ -27,8 +36,8 @@ module Modelling
 				.gsub(/\%.*([\n\r]+|$)/, "")	\
 				.gsub(/\s*([\/*])\s*/, '\1')	\
 				.gsub(/\s+/, " ")				\
-				.gsub(/\(\s+/, "(")				\
-				.gsub(/\s+\)/, ")")				\
+				.gsub(/\s*\(\s*/, "(")				\
+				.gsub(/\s*\)/, ")")				\
 				.strip
 			raise "Empty formula" if @formula == ""
 			@formula
@@ -50,11 +59,16 @@ module Modelling
 			!@formula.match(/(^|[^_A-Za-z0-9])#{Regexp.quote(id)}($|[^_A-Za-z0-9])/).nil?
 		end
 
+		# add a term string
+		def add(term)
+			@formula = "(#{@formula}) + (#{term})"
+		end
+
 		# get all identifiers in this formula
 		def all_idents
 			idents = []
 			@formula.scan(/([A-Za-z_][_A-Za-z0-9]*)/) {|x| idents.push($1)}
-			idents.uniq
+			idents.uniq.reject { |e| RESERVED_IDENTS.include? e  }
 		end
 
 		def to_s

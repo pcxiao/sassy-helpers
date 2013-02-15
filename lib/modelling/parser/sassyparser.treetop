@@ -195,7 +195,7 @@ module Modelling
 		end
 
 		rule ident
-			[a-zA-Z] [a-zA-Z\_0-9]* 
+			[a-zA-Z] [a-zA-Z\_0-9]* ("(" [0-9]+ ")")?
 		end
 
 		rule comma 
