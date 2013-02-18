@@ -322,7 +322,7 @@ module Modelling
 						orule.equation.add("-" + backward_rate)
 					end
 				end
-				output_eqn_str = forward_eqn_str
+				output_eqn_str = forward_eqn
 				if backward_eqn_str != ""
 					output_eqn_str = output_eqn_str + "-" + backward_eqn_str
 				end

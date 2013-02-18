@@ -66,8 +66,8 @@ module Modelling
 		# return the forward rate equation as a string
 		def forward_rate
 			result = "#{@equation.to_s}"
-			if @inputs.length > 0
-				inp_rate = (@inputs.map { |e| e.name }).join("*")
+			if @in.length > 0
+				inp_rate = (@in.map { |e| e.name }).join("*")
 				result = "(#{result})*#{inp_rate}"
 			end
 
@@ -79,9 +79,9 @@ module Modelling
 			result = "0"
 			if reversible?
 				result = "#{@equation_backward.to_s}"
-				if @inputs.length > 0
-					inp_rate = (@outputs.map { |e| e.name }).join("*")
-					result = "(#{result})*#{inp_rate}"
+				if @out.length > 0
+					out_rate = (@out.map { |e| e.name }).join("*")
+					result = "(#{result})*#{out_rate}"
 				end
 			end
 			result
