@@ -4,8 +4,8 @@ require File.expand_path('../lib/sassyversion', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Peter Krusche"]
   gem.email         = ["pkrusche@gmail.com"]
-  gem.summary = %q{Model conversion helpers for SaSSy/MATLAB and SBML}
-  gem.description = %q{Model conversion helpers for SaSSy/MATLAB and SBML.
+  gem.summary = %q{Model conversion helpers for SaSSy/MATLAB and XPP}
+  gem.description = %q{Model conversion helpers for SaSSy/MATLAB and XPP.
     See http://www2.warwick.ac.uk/fac/sci/systemsbiology/research/software/
   }
   gem.license = "MIT"
@@ -21,7 +21,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rspec", "~> 2.6"
   gem.add_development_dependency "awesome_print"
   gem.add_dependency "treetop", "~> 1.4"
-  gem.add_dependency "nokogiri"
-
-  gem.requirements << 'libSBML must be installed'
+  # gem.add_dependency "nokogiri"
 end

@@ -1,17 +1,14 @@
 # -*- encoding: utf-8 -*-
-require "modelling/sbml"
+require "modelling/xpp"
 require "modelling/sassy"
 module Modelling
 	# Model Class
 	class Model
-		include Modelling::SBMLModel
+		include Modelling::XPPModel
 		include Modelling::SassyModel
 
 		# The name of the model
 		attr_accessor :name
-
-		# an array of reactions
-		attr_accessor :reactions
 
 		# a hash of parameters
 		attr_accessor :parameters
@@ -29,7 +26,6 @@ module Modelling
 		attr_accessor :sassy_extra
 		
 		def initialize(_name = "Model")
-			@reactions = []
 			@rules = []
 			@parameters = {}
 			@species = {}
@@ -74,39 +70,6 @@ module Modelling
 						raise "rule #{rule.to_s} has undefined input: #{id}"
 					# else
 					# 	puts "#{id} used in #{rule.to_s}\n"
-					end
-				end
-			end
-
-			reaction_outputs = {}
-
-			@reactions.each do |reaction|
-				reaction.in do |input|
-					if !@species.key?(input.name)
-						raise "reaction #{reaction.to_s} has undefined input: #{input.name}"
-					end
-				end
-				reaction.out do |output|
-					reaction_outputs[output.name] = true
-					if rule_output_names.key? output.name
-						raise "Reaction output #{output.name} is already defined by a rule."
-					end
-					if !@species.key?(output.name)
-						raise "reaction #{reaction.to_s} has undefined output: #{output.name}"
-					end
-				end
-				reaction.equation.all_idents.each do |id|
-					idents = idents | [id]
-					if !syms.key?(id)
-						raise "rule #{rule.to_s} has undefined input: #{id}"
-					end
-				end
-				if reaction.reversible?
-					reaction.equation_backward.all_idents.each do |id|
-						idents = idents | [id]
-						if !syms.key?(id)
-							raise "rule #{rule.to_s} has undefined input: #{id}"
-						end
 					end
 				end
 			end
@@ -174,10 +137,6 @@ module Modelling
 				r.equation.replace_ident(sym, new_sym)
 			end
 
-			@reactions.each do |r|
-				r.equation.replace_ident(sym, new_sym)
-			end
-
 			if @parameters[sym]
 				@parameters.delete(sym)
 			else
@@ -228,9 +187,6 @@ module Modelling
 			# keep only rules for things which haven't been turned from parameter to species
 			@rules = @rules | m2.rules.reject { |r| m2.parameters.key?(r.output.name) and @species.key?(r.output.name) }
 
-			# reactions we can just concatenate
-			@reactions = @reactions | m2.reactions
-
 			self.validate
 		end
 
@@ -272,24 +228,6 @@ module Modelling
 			self.validate
 		end
 
-		# Make a reaction
-		def add_reaction(inputs, outputs, rate, back_rate=nil, comment = "")
-			if !inputs.kind_of?(Array)
-				inputs = [ inputs ]
-			end
-			if !outputs.kind_of?(Array)
-				outputs = [ outputs ]
-			end
-			back_eq = nil
-			if back_rate
-				back_eq = Equation.new(back_rate, comment)
-			end
-			@reactions.push(Reaction.new(inputs.map { |e| get_symbol(e) }, outputs.map { |e| get_symbol(e) }, 
-				Equation.new(rate, comment), back_eq))
-
-			self.validate
-		end
-
 		# get the rule which outputs to a symbol
 		def get_symbol_output_rule(sym, type = 'scalar')
 			rule = nil
@@ -305,38 +243,5 @@ module Modelling
 			rule
 		end
 
-		# convert reactions to rate rules
-		def reactions_to_rules
-			@reactions.each do |r|
-				forward_rate = r.forward_rate
-				if r.reversible?
-					backward_rate = r.backward_rate
-				end
-
-				r.in.each do |variable|
-					orule = get_symbol_output_rule(variable.name, 'rate')
-					if orule.nil?
-						orule = Rule.new(variable, Equation.new("-" + backward_rate), 'rate')
-						@rules.push(orule)
-					else
-						orule.equation.add("-" + backward_rate)
-					end
-				end
-				output_eqn_str = forward_eqn
-				if backward_eqn_str != ""
-					output_eqn_str = output_eqn_str + "-" + backward_eqn_str
-				end
-				(r.out.reject { |e| r.in.include? e }).each do |variable|
-					orule = get_symbol_output_rule(variable.name, 'rate')
-					if orule.nil?
-						orule = Rule.new(variable, Equation.new("#{variable.name}*(#{output_eqn_str})"), 'rate')
-						@rules.push(orule)
-					else
-						orule.equation.add(output_eqn_str)
-					end
-				end
-			end
-			self.validate
-		end
 	end
 end

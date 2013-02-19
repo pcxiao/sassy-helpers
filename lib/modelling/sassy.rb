@@ -120,9 +120,6 @@ END
 		# 
 		# This will convert reactions into rules
 		def to_sassy(basepath)
-			if @reactions.length > 0
-				self.reactions_to_rules
-			end
 			File.open("#{basepath}.par", "w") do |f|
 				@parameters.each do |n, p|
 					f.puts(p.to_par)
