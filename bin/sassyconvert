@@ -8,61 +8,72 @@ require 'bundler/setup'
 require 'optparse'
 require 'sassy-helpers'
 
-options = {
-	:outformat => 'sassy'
-	:format => 'ode'
-}
-
-OptionParser.new do |opts|
-	opts.banner = "Usage: sassyconvert [in] [out] [options]"
-
-	opts.on("--outformat NAME", String, "Output format: sassy|xpp") do |n|
-        options[:outformat] = n
-    end
-
-	opts.on("--informat NAME", String, "Input format: sassy|xpp") do |n|
-        options[:format] = n
-    end
+begin
 	
-	opts.on_tail("-h", "--help", "Show this message") do
-        puts opts
-        exit
-    end
+	options = {
+		:outformat => 'sassy',
+		:format => 'xpp'
+	}
 
-    opts.on_tail("--version", "Show version") do
-        puts SassyHelpers::VERSION + "\n"
-        exit
-    end
-end.parse!
+	OptionParser.new do |opts|
+		opts.banner = "Usage: sassyconvert [in] [out] [options]"
 
-ix = ARGV.index {|o| o.match(/^\-/)}
-if ix
-	files = ARGV[0..ix]
-else
-	files = ARGV
-end
+		opts.on("--outformat NAME", String, "Output format: sassy|xpp") do |n|
+	        options[:outformat] = n
+	    end
 
-p options
+		opts.on("--informat NAME", String, "Input format: sassy|xpp") do |n|
+	        options[:format] = n
+	    end
+		
+		opts.on_tail("-h", "--help", "Show this message") do
+	        puts opts
+	        exit
+	    end
 
-raise "One input must be specified" if files.length < 1
-raise "One output must be specified" if files.length < 2
+	    opts.on_tail("--version", "Show version") do
+	        puts SassyHelpers::VERSION + "\n"
+	        exit
+	    end
+	end.parse!
 
-m = Modelling::Model.new
+	ix = ARGV.index {|o| o.match(/^\-/)}
+	if ix
+		files = ARGV[0..ix]
+	else
+		files = ARGV
+	end
 
-case options[:format]
-when 'sassy'
-	m.from_sassy(files[0])
-when 'xpp', 'ode'
-	m.from_xpp(files[0])
-else
-	raise "Unknown input format #{options[:format]}\n"
-end
+	p options
 
-case options[:outformat]
-when 'sassy'
-	m.to_sassy(files[1])
-when 'xpp', 'ode'
-	m.to_xpp(files[1])
-else
-	raise "Unknown output format #{options[:outformat]}\n"
+	raise "One input must be specified" if files.length < 1
+	raise "One output must be specified" if files.length < 2
+
+	m = Modelling::Model.new
+
+	puts "Reading #{files[0]}\n"
+
+	case options[:format]
+	when 'sassy'
+		m.from_sassy(files[0])
+	when 'xpp', 'ode'
+		m.from_xpp(files[0])
+	else
+		raise "Unknown input format #{options[:format]}\n"
+	end
+
+	puts "Writing #{files[1]}\n"
+
+	case options[:outformat]
+	when 'sassy'
+		m.to_sassy(files[1])
+	when 'xpp', 'ode'
+		m.to_xpp(files[1])
+	else
+		raise "Unknown output format #{options[:outformat]}\n"
+	end
+
+	puts "done.\n"
+rescue Exception => e
+	puts "Error: #{e.to_s}\n"	
 end
