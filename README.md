@@ -54,6 +54,10 @@ Hopefully, I will find the time to make this all easier soon.
 In the sassy-helpers directory, there is a `bin` directory, which contains the
 `sassyconvert` script.
 
+**WARNING**: This script will not ask to overwrite outputs if they already exist,
+but rather just go and do so. Make backups of your ode and model files (or write 
+to a different location).
+
 You can use it to convert back and forth between different formats:
 
 ```
@@ -82,10 +86,3 @@ limited to a subset of XPP's and SBML's features:
 Some sanity-checking is done on the models, but we don't actually
 parse formulas (match braces, check for existence of functions, etc.).
 
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
