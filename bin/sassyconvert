@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+
+# Combine multiple models into one
+
+require 'rubygems'
+require 'bundler/setup'
+
+require 'optparse'
+require 'sassy-helpers'
+
+options = {
+	:outformat => 'sassy'
+	:format => 'ode'
+}
+
+OptionParser.new do |opts|
+	opts.banner = "Usage: sassyconvert [in] [out] [options]"
+
+	opts.on("--outformat NAME", String, "Output format: sassy|xpp") do |n|
+        options[:outformat] = n
+    end
+
+	opts.on("--informat NAME", String, "Input format: sassy|xpp") do |n|
+        options[:format] = n
+    end
+	
+	opts.on_tail("-h", "--help", "Show this message") do
+        puts opts
+        exit
+    end
+
+    opts.on_tail("--version", "Show version") do
+        puts SassyHelpers::VERSION + "\n"
+        exit
+    end
+end.parse!
+
+ix = ARGV.index {|o| o.match(/^\-/)}
+if ix
+	files = ARGV[0..ix]
+else
+	files = ARGV
+end
+
+p options
+
+raise "One input must be specified" if files.length < 1
+raise "One output must be specified" if files.length < 2
+
+m = Modelling::Model.new
+
+case options[:format]
+when 'sassy'
+	m.from_sassy(files[0])
+when 'xpp', 'ode'
+	m.from_xpp(files[0])
+else
+	raise "Unknown input format #{options[:format]}\n"
+end
+
+case options[:outformat]
+when 'sassy'
+	m.to_sassy(files[1])
+when 'xpp', 'ode'
+	m.to_xpp(files[1])
+else
+	raise "Unknown output format #{options[:outformat]}\n"
+end
