@@ -118,7 +118,7 @@ module Modelling
 					pname = $1
 					eqn = $2
 					if eqn.strip.match(/^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/)
-						@parameters[$1] = Parameter.new(pname, eqn.to_f, last_comment)
+						@parameters[pname] = Parameter.new(pname, eqn.to_f, last_comment)
 			#			puts "Par:  (#{@parameters[$1].to_s})\n"
 					else
 						if not @parameters[pname]
