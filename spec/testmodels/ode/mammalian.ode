@@ -1,0 +1,236 @@
+# Goldbeter mammalian 
+# 
+
+
+
+# Parameters 
+# ---------- 
+
+# SASSy force parameter
+par force = 0.0
+# time of light on
+par dawn = 6.0
+# time of lights off
+par dusk = 18.0
+# first-order rate constant for transport of Per:Cry into nucleus
+par k1 = 0.4
+# first-order rate constant for transport of Per:Cry into cytosol
+par k2 = 0.2
+# association rate constant for Per:Cry
+par k3 = 0.4
+# dissociation rate constant for Per:Cry
+par k4 = 0.2
+# first-order rate constant for transport of Baml1 into nucleus
+par k5 = 0.4
+# first-order rate constant for transport of Baml1 into cytosol
+par k6 = 0.2
+# association rate constant for unphosphorylated Per:Cry with Clock:Baml1
+par k7 = 0.5
+# dissociation rate constant for unphosphorylated Per:Cry with Clock:Baml1
+par k8 = 0.1
+# activation constant for Hill function describing effect of Bmal1 on Per transcription
+par kap = 0.7
+# activation constant for Hill function describing effect of Bmal1 on Cry transcription
+par kac = 0.6
+# KIB activation constant for Hill function describing effect of nuclear CLOCKÐBMAL1 or REV-ERBa on Bmal1 transcription
+par kib = 2.2
+# nonspecific degradation of Bmal1 mRNA
+par kdmb = 0.01
+# nonspecific degradation of Cry mRNA
+par kdmc = 0.01
+# nonspecific degradation of Per mRNA
+par kdmp = 0.01
+# nonspecific degradation of protein (not cyto-Cry)
+par kdn = 0.01
+# nonspecific degradation of cyto-Cry protein
+par kdnc = 0.12
+# Michaelis constant for degradation of Rev-Erba
+par kd = 0.3
+# Michaelis constant for de-phosphorylation
+par kdp = 0.1
+# Michaelis constant for phosphorylation
+par kp = 0.1
+# Bmal1 mRNA enzymatic degradation Michaelis constant
+par kmb = 0.4
+# Cry mRNA enzymatic degradation Michaelis constant
+par kmc = 0.4
+# Per mRNA enzymatic degradation Michaelis constant
+par kmp = 0.31
+# first-order translation rate
+par ksb = 0.12
+# first-order translation rate
+par ksc = 1.6
+# first-order translation rate
+par ksp = 0.6
+# degree of cooperativity for Hill function describing effect of nuclear CLOCKÐBMAL1 or REV-ERBa on Bmal1 transcription
+par m = 2.0
+# degree of cooperativity for Hill function describing effect of Bmal1 on Per and Cry transcription
+par n = 4.0
+# maximum rate of phosporylation cyto-BMAL1
+par v1b = 0.5
+# maximum rate of phosporylation
+par v1c = 0.6
+# maximum rate of phosporylation
+par v1p = 0.4
+# maximum rate of phosporylation cyto-Per:Cry
+par v1pc = 0.4
+# maximum rate of de-phosporylation cyto-BMAL1
+par v2b = 0.1
+# maximum rate of de-phosporylation
+par v2c = 0.1
+# maximum rate of de-phosporylation
+par v2p = 0.3
+# maximum rate of de-phosporylation cyto-Per:Cry
+par v2pc = 0.1
+# maximum rate of phosporylation nuc-BMAL1
+par v3b = 0.5
+# maximum rate of phosporylation nuc-Per:Cry
+par v3pc = 0.4
+# maximum rate of de-phosporylation nuc-BMAL1
+par v4b = 0.2
+# maximum rate of de-phosporylation nuc-Per:Cry
+par v4pc = 0.1
+# not used
+par vphos = 0.4
+# degradation rate of fully phosphorylated form cyto-BMAL1-p
+par vdbc = 0.5
+# degradation rate of fully phosphorylated form nuc-BMAL1-p
+par vdbn = 0.6
+# degradation rate of fully phosphorylated form cyto-CRY-p
+par vdcc = 0.7
+# enzymatic degradation rate PER-CRY-CLOCK-BMAL1
+par vdin = 0.8
+# degradation rate of fully phosphorylated form cyto-PER-p
+par vdpc = 0.7
+# degradation rate of fully phosphorylated form cyto-Per:Cry-p
+par vdpcc = 0.7
+# degradation rate of fully phosphorylated form nuc-Per:Cry-p
+par vdpcn = 0.7
+# Bmal1 mRNA enzymatic degradation rate
+par vmb = 0.8
+# Cry mRNA enzymatic degradation rate
+par vmc = 1.0
+# Per mRNA enzymatic degradation rate
+par vmp = 1.1
+# max transcription rate BMAL1
+par vsb = 1.0
+# max transcription rate Cry
+par vsc = 1.1
+# max transcription rate Per light off
+par vsp = 1.5
+# change in trsncription rate of per when lights on
+par amp = 0.5
+
+# Initial values 
+# -------------- 
+
+# y(1) 
+init y_1 = 0
+# y(2) 
+init y_2 = 0
+# y(3) 
+init y_3 = 0
+# y(4) 
+init y_4 = 0
+# y(5) 
+init y_5 = 0
+# y(6) 
+init y_6 = 0
+# y(7) 
+init y_7 = 0
+# y(8) 
+init y_8 = 0
+# y(9) 
+init y_9 = 0
+# y(10) 
+init y_10 = 0
+# y(11) 
+init y_11 = 0
+# y(12) 
+init y_12 = 0
+# y(13) 
+init y_13 = 0
+# y(14) 
+init y_14 = 0
+# y(15) 
+init y_15 = 0
+# y(16) 
+init y_16 = 0
+
+# Rules 
+# ----- 
+
+# mRNA of Per, Cry and Bmal1 
+# ---------------------------------------------------- 
+# 1 Mp  (Per mRNA) 
+# 
+dy_1/dt = (vsp+amp*force)*y_14^n/(y_14^n + kap^n) - vmp*y_1/(y_1 + kmp) - kdmp*y_1
+
+# 2 Mc  (Cry mRNA) 
+# 
+dy_2/dt = vsc*y_14^n/(y_14^n + kac^n) - vmc*y_2/(y_2 + kmc) - kdmc*y_2
+
+# 3 Mb  (Bmal1 mRNA) 
+# 
+dy_3/dt = vsb*kib^m/(y_14^m + kib^m) - vmb*y_3/(y_3 + kmb) - kdmb*y_3
+
+# Phosphorilated and nonphosphorylated proteins PER and CRY in cytosol 
+# --------------------------------------------------------------------- 
+# 4 Pc  (PER) 
+# 
+dy_4/dt = ksp*y_1 - v1p*y_4/(kp + y_4) + v2p*y_6/(kdp + y_6)+ k4*y_8 - k3*y_4*y_5 - kdn*y_4
+
+# 5 Cc  (CRY) 
+# 
+dy_5/dt = ksc*y_2 - v1c*y_5/(kp + y_5) + v2c*y_7/(kdp + y_7)+ k4*y_8 - k3*y_4*y_5 - kdnc*y_5
+
+# 6 Pcp  (PER-p) 
+# 
+dy_6/dt = v1p*y_4/(kp + y_4)- v2p*y_6/(kdp + y_6)-vdpc*y_6/(kd + y_6)-kdn*y_6
+
+# 7 Ccp  (CRY-p) 
+# 
+dy_7/dt = v1c*y_5/(kp + y_5) - v2c*y_7/(kdp + y_7)-vdcc*y_7/(kd + y_7)-kdn*y_7
+
+# Phosphorilated and nonphosphorylated proteins PER-CRY complex 
+# --------------------------------------------------------------------- 
+# 8 PCc (PER-CRY cytosol) 
+# 
+dy_8/dt = -v1pc*y_8/(kp+y_8)+vdpc*y_10/(kdp+y_10)-k4*y_8+k3*y_4*y_5+k2*y_9- k1*y_8-kdn*y_8
+
+# 9 PCn (PER-CRY nucleus) 
+# 
+dy_9/dt = -v3pc*y_9/(kp+y_9)+v4pc*y_11/(kdp+y_11)-k2*y_9+k1*y_8-k7*y_14*y_9+ k8*y_16-kdn*y_9
+
+# 10 PCcp (PER-CRY-p cytosol) 
+# 
+dy_10/dt = v1pc*y_8/(kp+y_8)-vdpc*y_10/(kdp+y_10)-vdpcc*y_10/(kd+y_10)-kdn*y_10
+
+# 11 PCnp (PER-CRY-p nucleus) 
+# 
+dy_11/dt = v3pc*y_9/(kp+y_9)-v4pc*y_11/(kdp+y_11)-vdpcn*y_11/(kd+y_11)-kdn*y_11
+
+# Phosphorilated and nonphosphorylated protein BMAL1 
+# --------------------------------------------------------------------- 
+# 12 Bc  (BMAL1 cytosol) 
+# 
+dy_12/dt = ksb*y_3-v1b*y_12/(kp+y_12)+v2b*y_13/(kdp+y_13)-k5*y_12+k6*y_14-kdn*y_12
+
+# 13 Bcp (BMAL1-p cytosol) 
+# 
+dy_13/dt = v1b*y_12/(kp+y_12)-v2b*y_13/(kdp+y_13)-vdbc*y_13/(kd+y_13)-kdn*y_13
+
+# 14 Bn  (BMAL1 nucleus) 
+# 
+dy_14/dt = -v3b*y_14/(kp + y_14) + v4b*y_15/(kdp + y_15)+ k5*y_12 - k6*y_14 - k7*y_14*y_9 + k8*y_16 - kdn*y_14
+
+# 15 Bnp (BMAL1-p nucleus) 
+# 
+dy_15/dt = v3b*y_14/(kp + y_14) - v4b*y_15/(kdp + y_15)- vdbn*y_15/(kd + y_15) - kdn*y_15
+
+# Inactive complex PER-CRY=CLOCK-BMAL1 
+# --------------------------------------------------------------------- 
+# 16 In (PER-CRY-CLOCK-BMAL1) 
+# 
+dy_16/dt = -k8*y_16 + k7*y_14*y_9 - vdin*y_16/(kd + y_16) - kdn*y_16
+
