@@ -18,15 +18,15 @@ module Modelling
 		end
 
 		# initialize from a line in a sassy par file
-		# 
+		#
 		# === Example:
-		# 
+		#
 		#     Parameter.new.to_par("k  1  \"The value of parameter k\"").to_s
-		#     
+		#
 		#     gives
-		#     
+		#
 		# 	  Parameter 'k' = 1 (The value of parameter k)
-		#     
+		#
 		def from_par(str)
 			pa = str.split(/\s+/)
 			if pa.length < 2

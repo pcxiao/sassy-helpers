@@ -3,6 +3,9 @@ ODE Files taken from XPP-aut 7.0, which is licensed under GPL-v2 by
 G. Bard Ermentrout
 [www.math.pitt.edu/~bard/xpp/xpp.html](http://www.math.pitt.edu/~bard/xpp/xpp.html)
 
+(except for cellcycle_gerard10_5var.ode, which I added to test various
+ peculiar ways which are supposedly legal XPP commands)
+
 ---
 		    GNU GENERAL PUBLIC LICENSE
 		       Version 2, June 1991

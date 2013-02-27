@@ -37,7 +37,8 @@ module Modelling
 
 		# validate a model, i.e. make sure we all species and parameters
 		def validate
-			syms = {}
+			# time always exists
+			syms = { 't' => Parameter.new('t', 0) }
 			idents = []
 			@species.each {|k, v| syms[k] = v}
 			@parameters.each do |k, v| 
@@ -77,7 +78,7 @@ module Modelling
 			unused = idents.reject { |e| syms.key?(e) }
 			unused = unused | (syms.keys.reject { |e| idents.index(e) })
 			# dawn dusk and force are in every model (at least after sassy opens it)
-			unused = unused.reject { |e| e == 'dawn' || e == 'dusk' || e == 'force' \
+			unused = unused.reject { |e| e == 't' || e == 'dawn' || e == 'dusk' || e == 'force' \
 				|| rule_output_names.key?(e) || @species.key?(e) }
 			if unused.length > 0
 				puts "[W] Model has unused symbols: #{unused}\n"

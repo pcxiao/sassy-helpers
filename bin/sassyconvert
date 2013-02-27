@@ -9,7 +9,7 @@ require 'optparse'
 require 'sassy-helpers'
 
 begin
-	
+
 	options = {
 		:outformat => 'sassy',
 		:format => 'xpp'
@@ -25,7 +25,7 @@ begin
 		opts.on("--informat NAME", String, "Input format: sassy|xpp") do |n|
 	        options[:format] = n
 	    end
-		
+
 		opts.on_tail("-h", "--help", "Show this message") do
 	        puts opts
 	        exit
@@ -75,5 +75,8 @@ begin
 
 	puts "done.\n"
 rescue Exception => e
-	puts "Error: #{e.to_s}\n"	
+	if e.to_s != "Exit"
+		puts "Error: #{e.to_s}\n"
+		puts e.backtrace.join("\n")
+	end
 end

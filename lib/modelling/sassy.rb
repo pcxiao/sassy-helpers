@@ -2,14 +2,14 @@
 require "treetop"
 require "modelling/parser/sassyparser"
 
-module Modelling	
+module Modelling
 	module SassyModel
 		# our m file parser (only needed once)
 		@@sassyparser =  Modelling::SassyParser.new
 
 		# read from sassy/matlab format
-		# 
-		# Parameters: 
+		#
+		# Parameters:
 		# basepath          : the base path to the model (suffixed with _model.m to get the file name)
 		# parameters        : the name of the parameters file (optional)
 		# initvals          : optional initial values file
@@ -55,19 +55,22 @@ END
 
 			species_offset = @species.length
 
-			mdata[:equations].each_with_index.map do |e, i| 
+			mdata[:equations].each_with_index.map do |e, i|
 				if @species["y_#{i+1}"]
 					raise "Duplicate species y_#{i+1}\n"
 				end
-				@species["y_#{i+1}"] = Species.new("y_#{i+1}", 0, i+1+species_offset) 
+				@species["y_#{i+1}"] = Species.new("y_#{i+1}", 0, i+1+species_offset)
 			end
 
+			@parameters['force'] = Parameter.new('force', 0, "SASSy force parameter")
+			@parameters['dawn'] = Parameter.new('dawn', 6, "SASSy dawn parameter")
+			@parameters['dusk'] = Parameter.new('dusk', 18, "SASSy dusk parameter")
 			File.open(parameters, "r").each do |l|
 				lspl = l.split(/\s+/)
 				pname = lspl.shift
 				pval = lspl.shift
 				comment = lspl.join(" ").gsub(/^"/, "").gsub(/"$/, "").gsub(/\\"/, "\"")
-				if @parameters[pname]
+				if pname != 'force' and pname != 'dawn' and pname != 'dusk' and @parameters[pname]
 					puts "[W] Identical name for parameter #{pname}\n"
 				end
 				@parameters[pname] = Parameter.new(pname, pval.to_f, comment)
@@ -104,7 +107,7 @@ END
 			end
 
 			mdata[:equations].each_with_index.map { |e, i|
-			 	@rules.push (Rule.new(@species["y_#{i+1}"], eqns[i], 'rate')) 
+			 	@rules.push (Rule.new(@species["y_#{i+1}"], eqns[i], 'rate'))
 			}
 
 			# fix parameters
@@ -117,7 +120,7 @@ END
 		end
 
 		# Write matlab files with model, parameters and initial values
-		# 
+		#
 		# This will convert reactions into rules
 		def to_sassy(basepath)
 			File.open("#{basepath}.par", "w") do |f|
@@ -136,7 +139,7 @@ END
 				end
 			end
 			File.open("#{basepath}_model.m", "w") do |f|
-				@rules.each do |rule| 
+				@rules.each do |rule|
 					if rule.type == 'scalar' and rule.output.kind_of?(Species)
 						raise "Cannot export scalar species rules to Sassy format"
 					end
@@ -146,7 +149,7 @@ END
 				end
 				f.puts <<-END
 function dydt = f(t, y, p)
-   
+
 % #{@notes.gsub("%%%%-cb-%%%%", "\n% ")}
 
 eval(p);
@@ -156,7 +159,7 @@ END
 				species_comments = []
 				((@rules.reject { |e| e.output.kind_of? Parameter}) \
 					.sort {|x,y| x.output.matlab_no <=> y.output.matlab_no}) \
-				    .each do |rule|					
+				    .each do |rule|
 						eq = rule.equation.clone
 						@species.each do |n,s|
 							eq.replace_ident(s.name, "y(#{s.matlab_no})")
@@ -166,12 +169,12 @@ END
 					end
 
 				(@rules.reject { |e| e.output.kind_of? Species}) \
-				    .each do |rule|					
+				    .each do |rule|
 						eq = rule.equation.clone
 						@species.each do |n,s|
 							eq.replace_ident(s.name, "y(#{s.matlab_no})")
 						end
-						
+
 						f.puts ("% " + eq.comments.gsub("%%%%-cb-%%%%", " ") + "\n#{rule.output.name} = "  + eq.to_s + ";\n")
 					end
 
