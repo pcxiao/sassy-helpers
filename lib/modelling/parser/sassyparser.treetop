@@ -2,7 +2,8 @@
 require "modelling/parser/sassyparser_extensions"
 module Modelling
 	# Sassy matlab file grammar
-	grammar Sassy
+	# :stopdoc:
+	grammar Sassy 
 
 		rule root 
 			c1:skip? f:function c2:skip?
@@ -238,4 +239,5 @@ module Modelling
 			}
 		end
 	end
+	# :startdoc:
 end
