@@ -1,11 +1,14 @@
 # -*- encoding: utf-8 -*-
 require "modelling/xpp"
 require "modelling/sassy"
+require "modelling/sbml"
+
 module Modelling
 	# Model Class
 	class Model
 		include Modelling::XPPModel
 		include Modelling::SassyModel
+		include Modelling::SBMLModel
 
 		# The name of the model
 		attr_accessor :name
