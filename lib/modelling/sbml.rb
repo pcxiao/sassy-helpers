@@ -2,6 +2,8 @@ require "rexml/document"
 
 module Modelling	
 	module SBMLModel
+
+		# write out model as SBML
 		def to_sbml(name)
 			File.open("#{name}", "w") do |file|
 				doc = REXML::Document.new 
@@ -32,9 +34,9 @@ module Modelling
 				@species.each do |n,spec|
 					s = REXML::Element.new "species"
 					pcc = "y(#{spec.matlab_no})"
-					s << REXML::Comment.new(pcc)
+					s << REXML::Comment.new(_comment_repl(pcc))
 					s.add_attributes({
-						"id" => spec.name,
+						"name" => spec.name,
 						"initialAmount" => spec.initial,
 						"compartment" => "cell",
 						"boundaryCondition" => "true"
@@ -48,7 +50,7 @@ module Modelling
 					p = REXML::Element.new "parameter"
 					if par.description
 						pcc = par.description.gsub("%%%%-cb-%%%%", "\n# ")
-						p << REXML::Comment.new(pcc)
+						p << REXML::Comment.new(_comment_repl(pcc))
 					end
 					p.add_attributes({
 						"name" => par.name,
@@ -63,12 +65,11 @@ module Modelling
 					rt = "speciesConcentrationRule"
 					re = REXML::Element.new rt
 					eqc = r.equation.comments.gsub("%%%%-cb-%%%%", "\n# ")
-					re << REXML::Comment.new(eqc)
+					re << REXML::Comment.new(_comment_repl(eqc))
 					re.add_attributes({
 						"species" => r.output.name,
 						"type" => r.type,
-						"formula" => r.equation.to_s,
-						"compartment" => "cell"
+						"formula" => r.equation.to_s
 						})
 					lr << re
 				end
@@ -83,6 +84,11 @@ module Modelling
 				formatter = REXML::Formatters::Pretty.new(5)
 				formatter.write(doc, file)
     		end
+		end
+
+		# Convert notes to comments
+		def _comment_repl(value)
+			" " + value.gsub(/\-\-+/, "") + " "
 		end
 	end
 end

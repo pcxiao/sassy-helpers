@@ -123,7 +123,6 @@ and then possibly the model won't validate.
 
 ... stuff I plan to add
 
-* SBML output (I won't write input, since [Copasi](http://www.copasi.org/) does that)
 * Support for function definitions in XPP (and, potentially, MATLAB)
 * Plain Matlab/Octave output [low priority since this would essentially] be solved
   already by having SBML output, there is a [converter](http://www.ebi.ac.uk/compneur-srv/sbml/converters/SBMLtoXPP-Aut.html)

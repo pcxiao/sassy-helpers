@@ -22,7 +22,7 @@ begin
 	        options[:outformat] = n
 	    end
 
-		opts.on("--informat NAME", String, "Input format: sassy|xpp") do |n|
+		opts.on("--informat NAME", String, "Input format: sassy|xpp|sbml") do |n|
 	        options[:format] = n
 	    end
 
@@ -69,6 +69,8 @@ begin
 		m.to_sassy(files[1])
 	when 'xpp', 'ode'
 		m.to_xpp(files[1])
+	when 'sbml', 'xml'
+		m.to_sbml(files[1])
 	else
 		raise "Unknown output format #{options[:outformat]}\n"
 	end
