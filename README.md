@@ -10,7 +10,7 @@ So far, we can
 * create models in Ruby
 * read models from [XPP format](http://mrb.niddk.nih.gov/xpp/newstyle.html) used e.g. in [XPP-Aut](http://www.math.pitt.edu/~bard/xpp/xpp.html)
 * Read models and parameter files in SASSy's own format
-* write these models to MATLAB/SASSy/XPP format
+* write these models to MATLAB/SASSy/XPP/SBML format
 * Merge two models into one by re-defining parameters as species
 
 ## Installation
