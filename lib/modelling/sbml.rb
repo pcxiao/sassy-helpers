@@ -19,8 +19,8 @@ module Modelling
 				model.add_attribute('name', 'Exported_Model')
 				
 				if @notes.length > 0
-					nel = REXML::Elements.new("notes")
-					nel << REXML::Text.new("#{@notes.gsub("%%%%-cb-%%%%", "\n# ")}")
+					nel = REXML::Element.new("notes")
+					nel.text = @notes.gsub("%%%%-cb-%%%%", "\n# ")
 					model << nel
 				end
 
