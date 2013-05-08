@@ -2,6 +2,7 @@
 require "modelling/xpp"
 require "modelling/sassy"
 require "modelling/sbml"
+require "modelling/cpp"
 
 module Modelling
 	# Model Class
@@ -9,6 +10,7 @@ module Modelling
 		include Modelling::XPPModel
 		include Modelling::SassyModel
 		include Modelling::SBMLModel
+		include Modelling::CPPModel
 
 		# The name of the model
 		attr_accessor :name

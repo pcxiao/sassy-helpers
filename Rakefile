@@ -4,6 +4,7 @@ require "bundler/gem_tasks"
 desc "run treetop"
 task :treetop do
 	`tt lib/modelling/parser/sassyparser.treetop`
+	`tt lib/modelling/parser/matlabexpression.treetop`
 end
 
 ### Task: rdoc

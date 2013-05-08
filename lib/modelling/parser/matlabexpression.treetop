@@ -1,0 +1,58 @@
+# -*- encoding: utf-8 -*- 
+require "modelling/parser/matlabexpression_extensions"
+module Modelling
+	# MATLAB Expression grammar
+	# :stopdoc:
+	grammar MATLABExpr 
+		include Modelling::MatlabPowTransform
+
+		rule root
+			x:nexpr eof <Modelling::MatlabExpression> 
+		end
+
+		rule nexpr
+			atomic (op nexpr)? {
+				def atomic
+					false
+				end
+			}
+		end
+
+		rule atomic
+			ws? "pow"? "(" ws? nexpr ws? ")" ws? {
+				def atomic
+					true
+				end
+			}
+			/ numident {
+				def atomic
+					true
+				end	
+			}
+		end
+
+		rule numident
+			ws? [A-Za-z0-9\_\.\[\]\{\}]+ ws?
+		end
+
+		rule op
+			ws? "."? q:([^A-Za-z0-9\_\.\[\]\{\}\(\)]) ws? {
+				def text_value
+					q.text_value
+				end
+				def expop
+					q.text_value.match(/\.?\^/)
+				end
+			}
+		end
+
+		rule ws
+			[\s]+
+		end
+
+		rule eof
+		  !.
+		end
+
+	end
+end
