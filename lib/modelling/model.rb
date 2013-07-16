@@ -3,6 +3,7 @@ require "modelling/xpp"
 require "modelling/sassy"
 require "modelling/sbml"
 require "modelling/cpp"
+require "modelling/vfgen"
 
 module Modelling
 	# Model Class
@@ -11,6 +12,7 @@ module Modelling
 		include Modelling::SassyModel
 		include Modelling::SBMLModel
 		include Modelling::CPPModel
+		include Modelling::VFGenModel
 
 		# The name of the model
 		attr_accessor :name

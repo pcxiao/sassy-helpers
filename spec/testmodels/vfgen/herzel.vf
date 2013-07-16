@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<VectorField Name='herzel' Description='Herzel Mammalian Clock model equations  '>
+     <Parameter Name='force' DefaultValue='0.0' Description='set to 1 to enable per induction'/>
+     <Parameter Name='dawn' DefaultValue='6.0' Description='external force on'/>
+     <Parameter Name='dusk' DefaultValue='18.0' Description='external force off'/>
+     <Parameter Name='d_x1' DefaultValue='0.08' Description='deg. CLOCK/BMAL'/>
+     <Parameter Name='d_x2' DefaultValue='0.06' Description='deg. PER_n*/CRY_n'/>
+     <Parameter Name='d_x3' DefaultValue='0.09' Description='deg. PER_n/CRY_n'/>
+     <Parameter Name='d_x5' DefaultValue='0.17' Description='deg. REV-ERB_n'/>
+     <Parameter Name='d_x6' DefaultValue='0.12' Description='deg. ROR_n'/>
+     <Parameter Name='d_x7' DefaultValue='0.15' Description='deg. BMAL_n'/>
+     <Parameter Name='d_y1' DefaultValue='0.3' Description='deg. Per mRNA'/>
+     <Parameter Name='d_y2' DefaultValue='0.2' Description='deg. Cry mRNA'/>
+     <Parameter Name='d_y3' DefaultValue='2.0' Description='deg. Rev-Erb mRNA'/>
+     <Parameter Name='d_y4' DefaultValue='0.2' Description='deg. Ror mRNA'/>
+     <Parameter Name='d_y5' DefaultValue='1.6' Description='deg. Bmal mRNA'/>
+     <Parameter Name='d_z1' DefaultValue='0.23' Description='deg. CRY_c'/>
+     <Parameter Name='d_z2' DefaultValue='0.25' Description='deg. PER_c'/>
+     <Parameter Name='d_z3' DefaultValue='0.6' Description='deg. PER_c*'/>
+     <Parameter Name='d_z4' DefaultValue='0.2' Description='deg. PER_c*/CRY_c'/>
+     <Parameter Name='d_z5' DefaultValue='0.2' Description='deg. PER_c/CRY_c'/>
+     <Parameter Name='d_z6' DefaultValue='0.31' Description='deg. REV-ERB_c'/>
+     <Parameter Name='d_z7' DefaultValue='0.3' Description='deg. ROR_c'/>
+     <Parameter Name='d_z8' DefaultValue='0.73' Description='deg. BMAL_c'/>
+     <Parameter Name='kf_x1' DefaultValue='2.4' Description='CLOCK/BMAL-complex formation rate 1/h'/>
+     <Parameter Name='kd_x1' DefaultValue='0.01' Description='CLOCK/BMAL-complex dissociation rate 1/h'/>
+     <Parameter Name='kf_z4' DefaultValue='1.0' Description='PER_c*/CRY_c-complex formation rate (a.u.*h)^-1'/>
+     <Parameter Name='kd_z4' DefaultValue='1.0' Description='PER_c*/CRY_c-complex dissociation rate (h)^-1'/>
+     <Parameter Name='kf_z5' DefaultValue='1.0' Description='PER_c/CRY_c-complex formation rate (a.u.*h)^-1'/>
+     <Parameter Name='kd_z5' DefaultValue='1.0' Description='PER_c/CRY_c-complex dissociation rate (h)^-1'/>
+     <Parameter Name='kph_z2' DefaultValue='2.0' Description='PER_c phosphorylation rate'/>
+     <Parameter Name='kd_phz3' DefaultValue='0.05' Description='PER_c phosphorylation rate'/>
+     <Parameter Name='V_1max' DefaultValue='1.0' Description='transc. rate Per'/>
+     <Parameter Name='V_2max' DefaultValue='2.92' Description='transc. rate Cry'/>
+     <Parameter Name='V_3max' DefaultValue='1.9' Description='transc. rate Rev-Erb'/>
+     <Parameter Name='V_4max' DefaultValue='10.9' Description='transc. rate Ror'/>
+     <Parameter Name='V_5max' DefaultValue='1.0' Description='transc. rate Bmal'/>
+     <Parameter Name='k_t1' DefaultValue='3.0' Description='Per-activation rate'/>
+     <Parameter Name='k_i1' DefaultValue='0.9' Description='Per-inhibition rate'/>
+     <Parameter Name='k_t2' DefaultValue='2.4' Description='Cry-activation rate'/>
+     <Parameter Name='k_i2' DefaultValue='0.7' Description='Cry-inhibition rate'/>
+     <Parameter Name='k_i21' DefaultValue='5.2' Description='Cry-inhibition rate'/>
+     <Parameter Name='k_t3' DefaultValue='2.07' Description='Rev-Erb-activation rate'/>
+     <Parameter Name='k_i3' DefaultValue='3.3' Description='Rev-Erb-inhibition rate'/>
+     <Parameter Name='k_t4' DefaultValue='0.9' Description='Ror-activation rate'/>
+     <Parameter Name='k_i4' DefaultValue='0.4' Description='Ror-inhibition rate'/>
+     <Parameter Name='k_t5' DefaultValue='8.35' Description='Bmal-activation rate'/>
+     <Parameter Name='k_i5' DefaultValue='1.94' Description='Bmal-inhibition rate'/>
+     <Parameter Name='a' DefaultValue='12.0' Description='Per fold activation'/>
+     <Parameter Name='d' DefaultValue='12.0' Description='Cry fold activation'/>
+     <Parameter Name='g' DefaultValue='5.0' Description='Rev-Erb fold activation'/>
+     <Parameter Name='h' DefaultValue='5.0' Description='Ror fold activation'/>
+     <Parameter Name='ii' DefaultValue='12.0' Description='Bmal fold activation'/>
+     <Parameter Name='k_p1' DefaultValue='0.4' Description='PER_c production rate'/>
+     <Parameter Name='k_p2' DefaultValue='0.26' Description='CRY_c production rate'/>
+     <Parameter Name='k_p3' DefaultValue='0.37' Description='REV-ERB_c production rate'/>
+     <Parameter Name='k_p4' DefaultValue='0.76' Description='ROR_c production rate'/>
+     <Parameter Name='k_p5' DefaultValue='1.21' Description='BMAL_c production rate'/>
+     <Parameter Name='ki_z4' DefaultValue='0.2' Description='PER_c*/CRY_c import rate'/>
+     <Parameter Name='ki_z5' DefaultValue='0.1' Description='PER_c/CRY_c import rate'/>
+     <Parameter Name='ki_z6' DefaultValue='0.5' Description='REV-ERB_c import rate'/>
+     <Parameter Name='ki_z7' DefaultValue='0.1' Description='ROR_c import rate'/>
+     <Parameter Name='ki_z8' DefaultValue='0.1' Description='BMAL_c import rate'/>
+     <Parameter Name='ke_x2' DefaultValue='0.02' Description='PER_n*/CRY_n export rate'/>
+     <Parameter Name='ke_x3' DefaultValue='0.02' Description='PER_n/CRY_n export rate'/>
+     <Parameter Name='b' DefaultValue='5.0' Description='Per activation'/>
+     <Parameter Name='c' DefaultValue='7.0' Description='Per inhibition'/>
+     <Parameter Name='e' DefaultValue='6.0' Description='Cry activation'/>
+     <Parameter Name='f' DefaultValue='4.0' Description='Cry inhibition'/>
+     <Parameter Name='f1' DefaultValue='1.0' Description='Cry-inhibition'/>
+     <Parameter Name='v' DefaultValue='6.0' Description='Rev-Erb activation'/>
+     <Parameter Name='w' DefaultValue='2.0' Description='Rev-Erb inhibition'/>
+     <Parameter Name='p' DefaultValue='6.0' Description='Ror activation'/>
+     <Parameter Name='q' DefaultValue='3.0' Description='Ror inhibition'/>
+     <Parameter Name='n' DefaultValue='2.0' Description='Bmal activation'/>
+     <Parameter Name='m' DefaultValue='5.0' Description='Bmal inhibition'/>
+     <Parameter Name='y1_0' DefaultValue='0.0' Description='Per'/>
+     <Parameter Name='y2_0' DefaultValue='0.0' Description='Cry'/>
+     <Parameter Name='y3_0' DefaultValue='0.0' Description='Rev-Erb'/>
+     <Parameter Name='y4_0' DefaultValue='0.0' Description='Ror'/>
+     <Parameter Name='y5_0' DefaultValue='0.0' Description='Bmal'/>
+     <Parameter Name='transcription' DefaultValue='0.0' Description='Transcription off switch (0 -&gt; transc. on, 1-&gt; off)'/>
+     <Parameter Name='amp' DefaultValue='0.5' Description='light input amplification'/>
+     <StateVariable Name='y_1' DefaultInitialCondition='4.0' Formula='kf_x1*y_10 - kd_x1*y_1 - d_x1*y_1' Description='y(1) == x1 -&gt; CLOCK/BMAL  '/>
+     <StateVariable Name='y_2' DefaultInitialCondition='2.0' Formula='(1-transcription)*V_3max*((1 + g*(y_1/k_t3)^v)/(1 +((y_18 + y_19)/k_i3)^w*(y_1/k_t3)^v +(y_1/k_t3)^v)) - d_y3*y_2' Description='y(2) == y3 -&gt; Rev-Erb  '/>
+     <StateVariable Name='y_3' DefaultInitialCondition='8.0' Formula='(1-transcription)*V_4max*((1 + h*(y_1/k_t4)^p)/(1 +((y_18 + y_19)/k_i4)^q*(y_1/k_t4)^p +(y_1/k_t4)^p)) - d_y4*y_3' Description='y(3) == y4 -&gt; ROR  '/>
+     <StateVariable Name='y_4' DefaultInitialCondition='0.0' Formula='k_p3*(y_2 + y3_0) - ki_z6*y_4 - d_z6*y_4' Description='y(4) == z6 -&gt; REV-ERB-c  '/>
+     <StateVariable Name='y_5' DefaultInitialCondition='0.0' Formula='k_p4*(y_3 + y4_0) - ki_z7*y_5 - d_z7*y_5' Description='y(5) == z7 -&gt; ROR-c  '/>
+     <StateVariable Name='y_6' DefaultInitialCondition='0.0' Formula='ki_z6*y_4 - d_x5*y_6' Description='y(6) == x5 -&gt; REV-ERB-n  '/>
+     <StateVariable Name='y_7' DefaultInitialCondition='0.0' Formula='ki_z7*y_5 - d_x6*y_7' Description='y(7) == x6 -&gt; ROR-n  '/>
+     <StateVariable Name='y_8' DefaultInitialCondition='0.0' Formula='(1-transcription)*V_5max*((1 + ii*(y_7/k_t5)^n)/(1 +(y_6/k_i5)^m +(y_7/k_t5)^n)) - d_y5*y_8' Description='y(8) == y5 -&gt; BMAL  '/>
+     <StateVariable Name='y_9' DefaultInitialCondition='0.0' Formula='k_p5*(y_8 + y5_0) - ki_z8*y_9 - d_z8*y_9' Description='y(9) == z8 -&gt; BMAL-c  '/>
+     <StateVariable Name='y_10' DefaultInitialCondition='0.0' Formula='ki_z8*y_9 + kd_x1*y_1 - kf_x1*y_10 - d_x7*y_10' Description='y(10) == x7 -&gt; BMAL-n  '/>
+     <StateVariable Name='y_11' DefaultInitialCondition='0.0' Formula='(1-transcription)*(1+force*amp)*V_1max*((1 + a*(y_1/k_t1)^b)/(1 +((y_18 + y_19)/k_i1)^c*(y_1/k_t1)^b +(y_1/k_t1)^b)) - d_y1*y_11' Description='y(11) == y1 -&gt; Per  '/>
+     <StateVariable Name='y_12' DefaultInitialCondition='0.0' Formula='(1-transcription)*V_2max*((1 + d*(y_1/k_t2)^e)/(1 +((y_18 + y_19)/k_i2)^f*(y_1/k_t2)^e +(y_1/k_t2)^e))*1/(1 +(y_6/k_i21)^f1) - d_y2*y_12' Description='y(12) == y2 -&gt; Cry  '/>
+     <StateVariable Name='y_13' DefaultInitialCondition='0.0' Formula='k_p2*(y_12 + y2_0) + kd_z4*y_16 + kd_z5*y_17 - kf_z5*y_13*y_14 - kf_z4*y_13*y_15 - d_z1*y_13' Description='y(13) == z1 -&gt; CRY-c  '/>
+     <StateVariable Name='y_14' DefaultInitialCondition='0.0' Formula='k_p1*(y_11 + y1_0) + kd_z5*y_17 + kd_phz3*y_15 - kf_z5*y_14*y_13 - kph_z2*y_14 - d_z2*y_14' Description='y(14) == z2 -&gt; PER-c  '/>
+     <StateVariable Name='y_15' DefaultInitialCondition='0.0' Formula='kph_z2*y_14 + kd_z4*y_16 - kd_phz3*y_15 - kf_z4*y_15*y_13 - d_z3*y_15' Description='y(15) == z3 -&gt; PER-c*  '/>
+     <StateVariable Name='y_16' DefaultInitialCondition='0.0' Formula='kf_z4*y_13*y_15 + ke_x2*y_18 - ki_z4*y_16 - kd_z4*y_16 - d_z4*y_16' Description='y(16) == z4 -&gt; PER-c*/CRY-c  '/>
+     <StateVariable Name='y_17' DefaultInitialCondition='1.0' Formula='kf_z5*y_13*y_14 + ke_x3*y_19 - ki_z5*y_17 - kd_z5*y_17 - d_z5*y_17' Description='y(17) == z5 -&gt; PER-c/CRY-c  '/>
+     <StateVariable Name='y_18' DefaultInitialCondition='0.0' Formula='ki_z4*y_16 - ke_x2*y_18 - d_x2*y_18' Description='y(18) == x2 -&gt; PER-n*/CRY-n  '/>
+     <StateVariable Name='y_19' DefaultInitialCondition='0.0' Formula='ki_z5*y_17 - ke_x3*y_19 - d_x3*y_19' Description='y(19) == x3 -&gt; PER-n/CRY-n  '/>
+</VectorField>

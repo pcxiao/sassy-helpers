@@ -71,6 +71,8 @@ begin
 		m.to_xpp(files[1])
 	when 'sbml', 'xml'
 		m.to_sbml(files[1])
+	when 'vf', 'vfgen'
+		m.to_vfgen(files[1])
 	when 'cpp'
 		m.to_cpp(files[1])
 	else
