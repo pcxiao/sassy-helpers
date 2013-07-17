@@ -12,7 +12,9 @@ begin
 
 	options = {
 		:outformat => 'sassy',
-		:format => 'xpp'
+		:format => 'xpp',
+		:unparam => [],
+		:param => nil
 	}
 
 	OptionParser.new do |opts|
@@ -30,7 +32,12 @@ begin
 	        puts opts
 	        exit
 	    end
-
+		opts.on("--unparameterize x,y,z", Array, "Parameters to remove") do |list|
+        	options[:unparam] = list
+      	end
+		opts.on("--unparameterize-but x,y,z", Array, "Parameters to keep (remove all others)") do |list|
+        	options[:param] = list
+      	end
 	    opts.on_tail("--version", "Show version") do
 	        puts SassyHelpers::VERSION + "\n"
 	        exit
@@ -60,6 +67,14 @@ begin
 		m.from_xpp(files[0])
 	else
 		raise "Unknown input format #{options[:format]}\n"
+	end
+
+	if not options[:param].nil?
+		options[:unparam] = m.parameters.keys.reject { |k| (not options[:param].index(k).nil?) }
+	end
+
+	options[:unparam].each do |par|
+		m.unparameterize(par)
 	end
 
 	puts "Writing #{files[1]}\n"

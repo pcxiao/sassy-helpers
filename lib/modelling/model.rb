@@ -93,6 +93,25 @@ module Modelling
 			self
 		end
 
+		# replace all occurrances of a parameter by its numeric value
+		# and remove the parameter
+		def unparameterize(pname)
+			par = nil
+			if @parameters.key?(pname)
+				par = @parameters[pname]
+			else
+				raise "Parameter #{pname} not found."
+			end
+
+			@rules.each do |r|
+				if r.output.name == pname
+					raise "Parameter #{pname} has an output rule associated with it, cannot unparameterize."
+				end
+				r.equation.replace_ident(pname, "#{par.value}")
+			end
+			delete_symbol(pname)
+		end
+
 		# Turn a parameter into a species
 		# Returns: the Species object of the newly generated species
 		def parameter_to_species(pname)
