@@ -7,7 +7,7 @@ module Modelling
 		# because they are built-in functions in MATLAB
 		RESERVED_IDENTS = [
 			"sin", "asin", "cos", "acos", "tan", "atan", "atan2",
-			"sinh", "asinh", "cosh", "acosh", "tanh", "atanh", 
+			"sinh", "asinh", "cosh", "acosh", "tanh", "atanh", "floor", 
 			"log", "log2", "log10", "pow", "exp", "sqrt", "pi", "abs"
 			];
 
