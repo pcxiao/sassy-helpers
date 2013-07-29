@@ -8,7 +8,8 @@ module Modelling
 		RESERVED_IDENTS = [
 			"sin", "asin", "cos", "acos", "tan", "atan", "atan2",
 			"sinh", "asinh", "cosh", "acosh", "tanh", "atanh", "floor", 
-			"log", "log2", "log10", "pow", "exp", "sqrt", "pi", "abs"
+			"log", "log2", "log10", "pow", "exp", "sqrt", "pi", "abs", 
+			"gamma", "tgamma" # TODO: convert these back and forth
 			];
 
 		attr_accessor :formula
