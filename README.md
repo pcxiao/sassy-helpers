@@ -3,15 +3,16 @@
 This is a set of Ruby scripts for creating ODE models that
 can be used in [SASSy](http://www2.warwick.ac.uk/fac/sci/systemsbiology/research/software/), 
 a [MATLAB](http://mathworks.co.uk)-based software for performing
-sensitivity analysis on [dynamical systems models](http://en.wikipedia.org/wiki/Dynamical_systems), e.g. in [mathematical biology](http://en.wikipedia.org/wiki/Mathematical_and_theoretical_biology).
+sensitivity analysis on [dynamical systems models](http://en.wikipedia.org/wiki/Dynamical_systems), e.g. in [mathematical biology](http://en.wikipedia.org/wiki/Mathematical_and_theoretical_biology). Especially together with converters like [VFGen](http://www.warrenweckesser.net/vfgen/) and [SBFC](http://www.ebi.ac.uk/compneur-srv/converters/converters), this tool is helpful when creating command-line scripted parameter sweeps or when using different software packages for analysing a model.
 
-So far, we can 
+So far, it can:
 
-* create models in Ruby
-* read models from [XPP format](http://mrb.niddk.nih.gov/xpp/newstyle.html) used e.g. in [XPP-Aut](http://www.math.pitt.edu/~bard/xpp/xpp.html)
+* Read models from [XPP format](http://mrb.niddk.nih.gov/xpp/newstyle.html) used e.g. in [XPP-Aut](http://www.math.pitt.edu/~bard/xpp/xpp.html)
 * Read models and parameter files in SASSy's own format
-* write these models to MATLAB/SASSy/XPP/SBML format
-* Merge two models into one by re-defining parameters as species
+* Write these models to MATLAB/SASSy/XPP/SBML/VFGen/C++ format
+* Merge two models into one by re-defining parameters as species (this requires writing a Ruby script)
+* Change parameters in a model on the command line for quick scripted parameter sweeps.
+* Replace parameters by their numerical values (useful when using together with [VFGen](http://www.warrenweckesser.net/vfgen/) to output [Auto](http://indy.cs.concordia.ca/auto/) models).
 
 ## Installation
 
@@ -39,6 +40,12 @@ bundle exec rspec
 
 to run the tests. Some example models are included in `spec/testmodels`.
 
+You can install the gem for system-wide usage by running
+
+```
+rake install
+```
+
 ### Should this not work...
 
 You need to have Ruby at version > 1.9.3 and a relatively recent version of 
@@ -60,8 +67,11 @@ gem install bundler
 bundle install
 ```
 
-Hopefully, I will find the time to make this all easier soon. I will also
-provide system-wide install instructions as soon as it's mature enough.
+Again, you can install the gem for system-wide usage by running
+
+```
+rake install
+```
 
 ## Usage
 
@@ -89,13 +99,19 @@ cellcycle_gerard10_5var.y
 You can also convert these back to ode:
 
 ```
-$ bin/sassyconvert cellcycle_gerard10_5var cellcycle.ode --informat sassy --outformat xpp
+$ sassyconvert cellcycle_gerard10_5var cellcycle.ode --informat sassy --outformat xpp
 ```
 
 This will create `cellcycle.ode`. Note that this file is not necessarily identical with
 the original ode file it came from: the xpp format has a few fuzzy rules, and we don't
 remember the exact way this was implemented in the input file (we do remember extra
 lines with an @ or " in the beginning though).
+
+It is possible to change parameter values in the output model, the following sets the parameter GF to 2 (note: no spaces allowed in the assignment statement -- `GF = 2` rather than `GF=2` will give an error).
+
+```
+$ sassyconvert cellcycle_gerard10_5var cellcycle.ode --informat sassy --outformat xpp --set GF=2.0
+```
 
 Running the script with option `--help` will show further options.
 
@@ -123,6 +139,4 @@ and then possibly the model won't validate.
 
 ... stuff I plan to add
 
-* Support for function definitions in XPP (and, potentially, MATLAB)
-* Plain Matlab/Octave output [low priority since this would essentially] be solved
-  already by having SBML output, there is a [converter](http://www.ebi.ac.uk/compneur-srv/sbml/converters/SBMLtoXPP-Aut.html)
+* VFGen XML format input
