@@ -7,7 +7,7 @@ sensitivity analysis on [dynamical systems models](http://en.wikipedia.org/wiki/
 
 So far, it can:
 
-* Read models from [XPP format](http://mrb.niddk.nih.gov/xpp/newstyle.html) used e.g. in [XPP-Aut](http://www.math.pitt.edu/~bard/xpp/xpp.html)
+* Read models from [XPP format](http://mrb.niddk.nih.gov/xpp/newstyle.html) used e.g. in [XPP-Auto](http://www.math.pitt.edu/~bard/xpp/xpp.html)
 * Read models and parameter files in SASSy's own format
 * Write these models to MATLAB/SASSy/XPP/SBML/VFGen/C++ format
 * Merge two models into one by re-defining parameters as species (this requires writing a Ruby script)
