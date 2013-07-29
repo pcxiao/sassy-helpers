@@ -40,7 +40,7 @@ bundle exec rspec
 
 to run the tests. Some example models are included in `spec/testmodels`.
 
-You can install the gem for system-wide usage by running
+You can then install the gem by running
 
 ```
 rake install
@@ -67,7 +67,7 @@ gem install bundler
 bundle install
 ```
 
-Again, you can install the gem for system-wide usage by running
+Again, you can install the gem by running
 
 ```
 rake install
